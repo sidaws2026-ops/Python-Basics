@@ -1,0 +1,12 @@
+
+Escape Sequence	Name   Function	Example Output           Effect
+       \n	                Newline	                     Moves text after it to a new line.
+       \t	                Horizontal Tab	             Inserts a tab space.
+       \\	                Backslash	                 Prints a single literal \ character.
+       \'	                Single Quote	             Inserts a ' inside a single-quoted string.
+       \"	                Double Quote	             Inserts a " inside a double-quoted string.
+       \r	                Carriage Return	             Moves the cursor back to the start of the current line.
+       \b	                Backspace	                 Deletes the character immediately before it.
+       \f	                Form Feed	                 Advances text to the next page or section.
+       \v	                Vertical Tab	             Inserts vertical spacing.
+       \a	                ASCII Bell	                 Triggers a system alert sound in supported terminals.
