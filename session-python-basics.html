@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python Basics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0a0b0f;--surface:#131620;--surface2:#171b28;--code-bg:#0e1118;--border:#242a3a;--border-soft:#1b2030;
+  --text:#eceef4;--text-dim:#a7adc0;--text-faint:#7d849c;
+  --teal:#5eead4;--amber:#f0a34e;--blue:#6ea8fe;--violet:#b3a1ff;--red:#ff7b7f;--focus:#fff;
+  --accent:var(--teal);
+  --code-comment:#8b93ab;--code-string:#a6e3a1;--code-number:#fab387;--code-keyword:#cba6f7;--code-function:#89b4fa;
+  --font-d:'Space Grotesk',system-ui,-apple-system,sans-serif;
+  --font-b:'Inter',system-ui,-apple-system,sans-serif;
+  --font-m:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+  --shadow-md:0 1px 2px rgba(0,0,0,.25),0 4px 8px rgba(0,0,0,.2),0 12px 24px rgba(0,0,0,.18);
+  --nav-h:64px;
+}
+*{box-sizing:border-box}
+code,pre,.mini,.real-err{font-variant-ligatures:none;font-feature-settings:"liga" 0,"calt" 0}
+html{scroll-padding-top:calc(var(--nav-h) + 16px);-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+body{margin:0;background:var(--bg);color:var(--text);font:400 1.125rem/1.6 var(--font-b);overflow-wrap:break-word}
+h1,h2,h3,h4,p,ol,ul,pre{margin:0}
+h1,h2,h3,h4{font-family:var(--font-d);line-height:1.2;text-wrap:balance}
+p,li{text-wrap:pretty}
+a{color:inherit}
+a:focus-visible,button:focus-visible,summary:focus-visible,pre:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.top{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border)}
+.top-in{max-width:1120px;margin:0 auto;padding:0 24px;min-height:var(--nav-h);display:flex;align-items:center;gap:20px}
+.brand{font:600 1rem var(--font-d);white-space:nowrap;text-decoration:none}
+.top nav{display:flex;gap:4px;min-width:0;flex:1;justify-content:flex-end}
+.top nav a{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 12px;border-radius:8px;text-decoration:none;color:var(--text-dim);font-size:.9375rem;font-weight:500;white-space:nowrap;transition:background-color .12s ease-out,color .12s ease-out}
+.top nav a span{font-family:var(--font-m);font-size:.875rem;color:var(--text-faint)}
+.top nav a:hover{background:var(--surface);color:var(--text)}
+.top nav a[aria-current="true"]{background:var(--surface2);color:var(--text);box-shadow:inset 0 -2px 0 var(--accent)}
+.top nav a[aria-current="true"] span{color:var(--text)}
+main{max-width:1120px;margin:0 auto;padding:0 24px 96px}
+.hero{padding:64px 0 48px}
+.kicker{font:500 .875rem var(--font-m);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:clamp(2.25rem,5vw,3.5rem);font-weight:700;margin:12px 0 16px}
+.lead{font-size:1.25rem;color:var(--text-dim);max-width:60ch}
+.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:32px;padding:0;list-style:none;counter-reset:how}
+.how li{counter-increment:how;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;min-width:0}
+.how li::before{content:counter(how);display:block;font:600 .9375rem var(--font-m);color:var(--accent);margin-bottom:8px}
+.how b{display:block;font-family:var(--font-d);font-size:1.125rem;font-weight:600;margin-bottom:4px}
+.how p{color:var(--text-dim);font-size:1rem;line-height:1.5}
+.how p .in{display:inline;font:inherit;color:var(--text);margin:0}
+code{font-family:var(--font-m);font-size:.9em;color:var(--text);background:var(--surface2);padding:.1em .35em;border-radius:5px}
+.setup{margin-top:24px}
+.part{padding-top:56px;border-top:1px solid var(--border);margin-top:32px}
+.part.teal{--accent:var(--teal)}.part.amber{--accent:var(--amber)}.part.blue{--accent:var(--blue)}.part.violet{--accent:var(--violet)}
+.part-head h2{font-size:clamp(1.875rem,4vw,2.625rem);font-weight:700;margin:8px 0 12px}
+.goal{font-size:1.1875rem;color:var(--text-dim);max-width:62ch}
+.toc{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin-top:20px}
+.toc a{display:flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--border);border-radius:999px;text-decoration:none;font-size:.9375rem;color:var(--text-dim);transition:border-color .12s ease-out,color .12s ease-out}
+.toc a:hover{border-color:var(--accent);color:var(--text)}
+.topic{margin-top:56px}
+.topic h3{font-size:1.625rem;font-weight:600;margin-bottom:8px}
+.intro{color:var(--text-dim);max-width:72ch}
+.intro b{color:var(--text);font-weight:600}
+.like{margin-top:12px;padding:12px 16px;background:var(--surface);border-radius:8px;border-left:3px solid var(--accent);max-width:72ch}
+.like b{color:var(--accent);font-weight:600}
+.example{margin-top:28px}
+.say{margin-bottom:10px;max-width:72ch}
+.say b{font-weight:600}
+.example .code-box+.code-box{margin-top:12px}
+.code-box{background:var(--code-bg);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow-md)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;padding:0 6px 0 16px;background:var(--surface);border-bottom:1px solid var(--border-soft)}
+.label{font:500 .875rem var(--font-m);color:var(--accent)}
+.label code{background:none;padding:0}
+.copy{min-height:36px;min-width:64px;padding:0 12px;font:500 .875rem var(--font-b);color:var(--text);background:var(--surface2);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:background-color .1s ease-out}
+.copy:hover{background:var(--border)}
+.copy:active{transform:translateY(1px)}
+.copy.done{color:var(--bg);background:var(--accent);border-color:var(--accent)}
+.code-box pre{padding:16px 18px;overflow-x:auto;font:400 1.0625rem/1.55 var(--font-m);background:transparent;margin:0;border:0;border-radius:0;text-shadow:none}
+.code-box pre code{font:inherit;background:none;padding:0;color:var(--text);text-shadow:none}
+.token.comment{color:var(--code-comment)!important}
+.token.string{color:var(--code-string)!important}
+.token.number,.token.boolean{color:var(--code-number)!important}
+.token.keyword{color:var(--code-keyword)!important}
+.token.function,.token.builtin{color:var(--code-function)!important}
+.token.operator,.token.punctuation{color:var(--text-dim)!important;background:none!important}
+details summary{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:8px;cursor:pointer;font-size:1rem;font-weight:500;color:var(--text);background:var(--surface);border:1px solid var(--border);list-style:none;transition:background-color .1s ease-out}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"\25B8";color:var(--accent)}
+details[open] summary::before{content:"\25BE"}
+details summary:hover{background:var(--surface2)}
+.output{margin-top:12px}
+.stdout,.stderr,.mini{font:400 1.0625rem/1.5 var(--font-m);white-space:pre-wrap;overflow-wrap:anywhere}
+.stdout{margin-top:10px;padding:14px 18px;background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;color:var(--text)}
+.stderr{margin-top:6px;padding:14px 18px;background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:8px;color:var(--red)}
+.err-label{margin-top:10px;font-size:.9375rem;color:var(--red);font-weight:500}
+.err-label.ok{color:var(--text-dim)}
+.typed,.note-line{margin-top:10px;font-size:1rem;color:var(--text-dim);max-width:72ch}
+.callout{margin-top:24px;padding:14px 18px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px}
+.callout p{font-size:1rem;color:var(--text-dim)}
+.callout.warn{border-left-color:var(--amber)}
+.table-wrap{margin-top:24px;overflow-x:auto;border:1px solid var(--border);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:1rem}
+th{font:500 .875rem var(--font-m);text-align:left;color:var(--text-dim);background:var(--surface);padding:12px 16px;white-space:nowrap}
+td{padding:12px 16px;border-top:1px solid var(--border-soft);vertical-align:top;color:var(--text-dim)}
+td:first-child{white-space:nowrap}
+.mini{font-size:.9375rem;color:var(--text);white-space:pre;overflow-wrap:normal}
+.real-err{display:block;margin-top:6px;font:400 .875rem/1.45 var(--font-m);color:var(--red);overflow-wrap:anywhere}
+.task{margin-top:32px;padding:24px;background:var(--surface);border:1px solid var(--accent);border-radius:14px}
+.task-tag{font:500 .875rem var(--font-m);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.task h4{font-size:1.375rem;font-weight:600;margin:6px 0 12px}
+.task ol{padding-left:24px;color:var(--text-dim);max-width:74ch}
+.task li{margin-bottom:6px}
+.task code{overflow-wrap:anywhere}
+.answer{margin-top:16px}
+.answer summary{background:var(--surface2)}
+.answer .code-box{margin-top:12px}
+.end{margin-top:72px;padding-top:32px;border-top:1px solid var(--border);color:var(--text-dim);max-width:62ch}
+.end h2{font-size:1.875rem;font-weight:700;color:var(--text);margin-bottom:8px}
+@media (max-width:980px){
+  .top-in{flex-direction:column;align-items:stretch;gap:0;padding:6px 16px}
+  .brand{display:none}
+  .top nav{justify-content:flex-start;overflow-x:auto;scrollbar-width:none}
+  main{padding:0 16px 72px}
+  html{scroll-padding-top:72px}
+}
+@media (max-width:760px){
+  body{font-size:1rem}
+  .hero{padding:40px 0 32px}
+  .how{grid-template-columns:minmax(0,1fr)}
+  .code-box pre,.stdout,.stderr{font-size:.9375rem}
+  .task{padding:18px}
+}
+@media print{
+  .top,.copy{display:none}
+  details>*{display:block}
+}
+</style>
+</head>
+<body>
+<div class="top"><div class="top-in"><a class="brand" href="#start">Session 0: Python Basics</a><nav aria-label="Parts"><a href="#part-1" data-colour="teal"><span>1</span>Text &amp; Numbers</a><a href="#part-2" data-colour="amber"><span>2</span>Lists &amp; Dicts</a><a href="#part-3" data-colour="blue"><span>3</span>Conditions &amp; Loops</a><a href="#part-4" data-colour="violet"><span>4</span>Functions</a><a href="#part-5" data-colour="teal"><span>5</span>Errors &amp; Files</a></nav></div></div>
+<main id="start">
+<header class="hero">
+<p class="kicker">Session 0</p>
+<h1>Python Basics</h1>
+<p class="lead">You don't need any coding experience. We'll start from the very first line and use everyday examples: chai stalls, auto fares, exam marks and bills. Everything you learn here prepares you to build with AI.</p>
+<ol class="how">
+<li><b>Open the file</b><p>Open <code>practice.py</code> in your editor. It starts empty, and that's where your code goes.</p></li>
+<li><b>Paste one example</b><p>Press <b class="in">Copy</b>, then replace whatever is in the file. Each example runs on its own.</p></li>
+<li><b>Run it</b><p>Guess the output first. Then run the command below and compare with <b class="in">Show output</b>.</p></li>
+</ol>
+<div class="table-wrap"><table><thead><tr><th scope="col">Word you'll hear</th><th scope="col">What it means</th></tr></thead><tbody>
+<tr><td><b>Code</b></td><td>Instructions you write for the computer</td></tr>
+<tr><td><b>Editor</b></td><td>The app where you type code, like Word but for programs. VS Code is a popular one</td></tr>
+<tr><td><b>Terminal</b></td><td>A window where you type commands instead of clicking</td></tr>
+<tr><td><b>Run</b></td><td>Tell the computer to follow your instructions</td></tr>
+<tr><td><b>Output</b></td><td>What your program shows on the screen</td></tr>
+<tr><td><b>Error</b></td><td>Python's message saying it didn't understand something. Normal, and it happens to everyone</td></tr>
+</tbody></table></div>
+<div class="setup example"><div class="code-box"><div class="bar"><span class="label">terminal · open it in the folder that has practice.py</span></div><pre><code class="language-bash">python --version          # Windows: use py if python isn't found
+python3 --version         # Mac or Linux
+
+python practice.py        # Windows
+python3 practice.py       # Mac or Linux</code></pre></div></div>
+</header>
+<section class="part teal" id="part-1"><header class="part-head"><p class="kicker">Part 1</p><h2>Values, Text and Input</h2><p class="goal">By the end, your program can do the maths for a bill, ask a person a question and show a clean answer.</p><ol class="toc"><li><a href="#p1-what-is-a-program">What is a program?</a></li><li><a href="#p1-variables-giving-a-value-a-name">Variables: giving a value a name</a></li><li><a href="#p1-types-of-values">Types of values</a></li><li><a href="#p1-maths-in-python">Maths in Python</a></li><li><a href="#p1-text-and-numbers-don-t-mix-by-themselves">Text and numbers don't mix by themselves</a></li><li><a href="#p1-f-strings-filling-in-the-blanks">f-strings: filling in the blanks</a></li><li><a href="#p1-asking-a-question-with-input">Asking a question with input()</a></li><li><a href="#p1-cleaning-up-text">Cleaning up text</a></li></ol></header><section class="topic" id="p1-what-is-a-program"><h3>What is a program?</h3><p class="intro">A program is a list of steps written for the computer. The computer does them from top to bottom, exactly as written. It never guesses what you meant.</p><p class="like"><b>Think of it like:</b> A recipe. Follow the steps in order and you get the dish. Miss a step and it goes wrong.</p><div class="example"><p class="say"><code>print()</code> shows something on the screen. A line starting with <code>#</code> is a note for humans, and the computer skips it.</p><div class="code-box"><div class="bar"><span class="label">Example 1.1</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python"># This is a note. The computer skips this line.
+print("Namaskara, Bengaluru!")
+print("Two idli", "one coffee")
+print()
+print("Total: Rs", 40 + 25)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Namaskara, Bengaluru!
+Two idli one coffee
+
+Total: Rs 65</pre></details></div><div class="example"><p class="say"><code>print()</code> has two helpers. <code>sep</code> chooses what goes between values, and <code>end</code> chooses what goes at the end of the line.</p><div class="code-box"><div class="bar"><span class="label">Example 1.2</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">print("Mysuru", "Mandya", "Bengaluru", sep=" to ")
+print("Loading", end="...")
+print("done")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Mysuru to Mandya to Bengaluru
+Loading...done</pre></details></div></section><section class="topic" id="p1-variables-giving-a-value-a-name"><h3>Variables: giving a value a name</h3><p class="intro">A variable is a name for a value, so you can use it again later. You can also change what's inside at any time.</p><p class="like"><b>Think of it like:</b> A labelled steel dabba. The label says <code>sugar</code>. What's inside can change, but you still find it by the label.</p><div class="example"><p class="say">We save a shop name, the number of cups and the price of one cup. Then we use those names to work out the bill.</p><div class="code-box"><div class="bar"><span class="label">Example 1.3</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">shop = "Raju Tea Stall"
+cups = 2
+price = 15
+
+print(shop)
+print(cups * price)
+
+cups = 3              # A friend joined, so now it's 3 cups
+print(cups * price)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Raju Tea Stall
+30
+45</pre></details></div><div class="callout tip"><p>Good names explain themselves: <code>total_price</code>, <code>pincode</code>, <code>is_paid</code>. A name can't start with a number or contain spaces, and <code>Price</code> and <code>price</code> are two different names.</p></div><div class="example"><p class="say">You can name several values in one line, and swap two values without a third name. It's like two friends swapping seats.</p><div class="code-box"><div class="bar"><span class="label">Example 1.4</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">morning_tea, evening_tea = 20, 35
+print(morning_tea, evening_tea)
+
+morning_tea, evening_tea = evening_tea, morning_tea
+print(morning_tea, evening_tea)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">20 35
+35 20</pre></details></div></section><section class="topic" id="p1-types-of-values"><h3>Types of values</h3><p class="intro">Python treats text, whole numbers and decimal numbers differently, so it keeps track of what kind each value is. <code>type()</code> tells you the kind. You'll see these short Python names in error messages, so it helps to recognise them.</p><p class="like"><b>Think of it like:</b> Items in a kitchen. You store liquids, grains and vegetables differently, even though they're all food.</p><div class="table-wrap"><table><thead><tr><th scope="col">Python's name</th><th scope="col">In simple words</th><th scope="col">Example</th></tr></thead><tbody><tr><td><code>str</code></td><td>Text (a "string" of letters), always inside quotes</td><td><code>"Asha"</code></td></tr><tr><td><code>int</code></td><td>A whole number</td><td><code>24</code></td></tr><tr><td><code>float</code></td><td>A number with a decimal point</td><td><code>4.5</code></td></tr><tr><td><code>bool</code></td><td>Only two choices: yes or no</td><td><code>True</code> or <code>False</code></td></tr><tr><td><code>None</code></td><td>Nothing here yet</td><td><code>None</code></td></tr></tbody></table></div><div class="example"><p class="say">Details from a simple student form, each one a different type of value.</p><div class="code-box"><div class="bar"><span class="label">Example 1.5</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">name = "Asha"
+age = 24
+height = 5.4
+fees_paid = True
+nickname = None
+
+print(type(name))
+print(type(age))
+print(type(height))
+print(type(fees_paid))
+print(type(nickname))</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">&lt;class 'str'&gt;
+&lt;class 'int'&gt;
+&lt;class 'float'&gt;
+&lt;class 'bool'&gt;
+&lt;class 'NoneType'&gt;</pre></details></div></section><section class="topic" id="p1-maths-in-python"><h3>Maths in Python</h3><p class="intro">Python works like a calculator. The symbols are a little different: <code>*</code> means multiply and <code>/</code> means divide.</p><div class="example"><p class="say">Sharing 10 samosas among 3 friends shows the three ways of dividing: the exact answer, how many each friend gets, and how many are left over.</p><div class="code-box"><div class="bar"><span class="label">Example 1.6</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">print(10 + 3)     # Add
+print(10 - 3)     # Subtract
+print(10 * 3)     # Multiply
+
+print(10 / 3)     # Exact answer
+print(10 // 3)    # Each friend gets 3 samosas
+print(10 % 3)     # 1 samosa is left over
+
+print(2 ** 3)     # 2 x 2 x 2</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">13
+7
+30
+3.3333333333333335
+3
+1
+8</pre></details></div><div class="example"><p class="say">Python follows school maths: multiply before add, and brackets first.</p><div class="code-box"><div class="bar"><span class="label">Example 1.7</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python"># 2 plates of idli at Rs 30, plus a Rs 10 parcel charge
+print(2 * 30 + 10)
+
+# 2 friends, each with Rs 30 idli and a Rs 10 coffee
+print(2 * (30 + 10))</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">70
+80</pre></details></div><div class="example"><p class="say">A real bill: friends at a restaurant add a 10% tip and split the total equally.</p><div class="code-box"><div class="bar"><span class="label">Example 1.8</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">bill = 1250
+friends = 4
+
+tip = bill * 0.10
+total = bill + tip
+each = total / friends
+
+print("Total:", total)
+print("Each person pays:", each)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Total: 1375.0
+Each person pays: 343.75</pre></details></div><div class="example"><p class="say">Your electricity bill works the same way: units used times the rate, plus a fixed charge.</p><div class="code-box"><div class="bar"><span class="label">Example 1.9</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">units = 120
+rate = 6
+fixed_charge = 100
+
+amount = units * rate + fixed_charge
+print("Electricity bill: Rs", amount)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Electricity bill: Rs 820</pre></details></div><div class="example"><p class="say"><code>+=</code> is a shortcut for "add this to what's already there", like adding to your wallet balance.</p><div class="code-box"><div class="bar"><span class="label">Example 1.10</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">wallet = 100
+wallet += 50      # Added Rs 50. Same as wallet = wallet + 50
+wallet -= 20      # Spent Rs 20
+wallet *= 2       # An offer doubled it
+wallet /= 4       # Shared between 4 people
+print(wallet)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">65.0</pre></details></div><div class="example"><p class="say">Python has ready-made tools for numbers. <code>round()</code> tidies up decimals, <code>abs()</code> removes a minus sign, and <code>min()</code> and <code>max()</code> find the smallest and largest.</p><div class="code-box"><div class="bar"><span class="label">Example 1.11</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">print(round(1250.756, 2))     # Keep 2 decimal places
+print(round(1250.756))        # Nearest whole number
+print(abs(-50))               # Rs 50 difference, ignoring the minus
+print(min(30, 15, 45))        # Cheapest price
+print(max(30, 15, 45))        # Highest price
+print(pow(2, 3))              # Same as 2 ** 3</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">1250.76
+1251
+50
+15
+45
+8</pre></details></div><div class="example"><p class="say">A small surprise: computers store decimals approximately. It isn't a mistake in your code. Use <code>round()</code> when you show money.</p><div class="code-box"><div class="bar"><span class="label">Example 1.12</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">print(0.1 + 0.2)
+print(round(0.1 + 0.2, 2))</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">0.30000000000000004
+0.3</pre></details></div></section><section class="topic" id="p1-text-and-numbers-don-t-mix-by-themselves"><h3>Text and numbers don't mix by themselves</h3><p class="intro">To Python, <code>"5"</code> in quotes is text, and <code>5</code> is a number. Adding two pieces of text just puts them side by side. To do maths on text, convert it first.</p><p class="like"><b>Think of it like:</b> A phone number. It's made of digits, but you'd never add two phone numbers together.</p><div class="example"><p class="say">See the difference, then use <code>int()</code>, <code>float()</code> and <code>str()</code> to change a value from one type to another.</p><div class="code-box"><div class="bar"><span class="label">Example 1.13</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">print("5" + "5")     # Text: puts them side by side
+print(5 + 5)         # Numbers: adds them
+
+print(int("45") + 5)           # int() makes a whole number
+print(float("99.50"))          # float() makes a decimal number
+print(str(500) + " rupees")    # str() makes text
+
+print(bool(0), bool(7))        # bool(): 0 is False, others are True
+print(isinstance(45, int))     # Is 45 a whole number?</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">55
+10
+50
+99.5
+500 rupees
+False True
+True</pre></details></div><div class="example"><p class="say">This one fails on purpose. Python won't join text and a number with <code>+</code>.</p><div class="code-box"><div class="bar"><span class="label">Example 1.14</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">age = 25
+print("Age: " + age)</code></pre></div><details class="output"><summary>Show the error</summary><p class="err-label">Error, last line:</p><pre class="stderr">TypeError: can only concatenate str (not "int") to str</pre></details><p class="note-line">Don't worry when you see an error. It's Python telling you what confused it. An f-string, coming next, fixes this.</p></div><div class="example"><p class="say">More about writing text: quotes inside quotes, a new line with <code>\n</code>, a tab gap with <code>\t</code>, joining with <code>+</code>, and repeating with <code>*</code>.</p><div class="code-box"><div class="bar"><span class="label">Example 1.15</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">print("It's a sunny day")
+print('She said "Namaskara"')
+print("First line\nSecond line")
+print("Name:\tAsha")
+
+print("Hello" + " " + "Asha")
+print("-" * 20)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">It's a sunny day
+She said "Namaskara"
+First line
+Second line
+Name:	Asha
+Hello Asha
+--------------------</pre></details></div><div class="example"><p class="say">Triple quotes let one piece of text run over several lines, which is handy for a long message or an AI prompt.</p><div class="code-box"><div class="bar"><span class="label">Example 1.16</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">message = """Dear Asha,
+Your order has been delivered.
+Thank you!"""
+
+print(message)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Dear Asha,
+Your order has been delivered.
+Thank you!</pre></details></div></section><section class="topic" id="p1-f-strings-filling-in-the-blanks"><h3>f-strings: filling in the blanks</h3><p class="intro">Put the letter <code>f</code> before the quotes, then put any name or calculation inside <code>{ }</code>. Python fills in the value. You'll use this in almost every program.</p><p class="like"><b>Think of it like:</b> A form letter: "Dear ____, your bill is Rs ____." Python fills in the blanks.</p><div class="example"><p class="say">A shop bill line, filled in automatically. <code>:.2f</code> means "show 2 decimal places", and <code>:,</code> adds commas to big numbers.</p><div class="code-box"><div class="bar"><span class="label">Example 1.17</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">item = "Filter coffee"
+cups = 3
+price = 30
+
+print(f"{cups} x {item} = Rs {cups * price}")
+
+print(f"Pay Rs {1234.5:.2f}")
+print(f"Salary: Rs {100000:,}")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">3 x Filter coffee = Rs 90
+Pay Rs 1234.50
+Salary: Rs 100,000</pre></details></div><div class="example"><p class="say">You can round, add commas or keep things lined up inside an f-string. <code>:&lt;14</code> keeps a value on the left of a space 14 characters wide, and <code>:&gt;6</code> keeps it on the right of a space 6 wide.</p><div class="code-box"><div class="bar"><span class="label">Example 1.18</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">print(f"{'Idli':&lt;14}{30:&gt;6}")
+print(f"{'Masala dosa':&lt;14}{60:&gt;6}")
+print(f"Marks: {87.456:.1f}")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Idli              30
+Masala dosa       60
+Marks: 87.5</pre></details></div></section><section class="topic" id="p1-asking-a-question-with-input"><h3>Asking a question with input()</h3><p class="intro"><code>input()</code> stops and waits for the person to type something. Whatever they type always comes in as text, even a number, so convert it before doing maths.</p><p class="like"><b>Think of it like:</b> A shopkeeper asking, "How many?" and waiting for your reply.</p><div class="example"><p class="say">Ask for a name, then greet that person.</p><div class="code-box"><div class="bar"><span class="label">Example 1.19</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">name = input("What is your name? ")
+print(f"Namaskara, {name}!")</code></pre></div><p class="typed">Sample run, typing: <code>Asha</code></p><details class="output"><summary>Show output</summary><pre class="stdout">What is your name? Asha
+Namaskara, Asha!</pre></details></div><div class="example"><p class="say">Work out an auto fare from the distance. Notice <code>float()</code> around <code>input()</code>, because we need a number and not text.</p><div class="code-box"><div class="bar"><span class="label">Example 1.20</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">km = float(input("How many km? "))
+fare = 30 + km * 15
+
+print(f"Auto fare: Rs {fare}")</code></pre></div><p class="typed">Sample run, typing: <code>4</code></p><details class="output"><summary>Show output</summary><pre class="stdout">How many km? 4
+Auto fare: Rs 90.0</pre></details><p class="note-line">Now run it and type <code>abc</code>. The program crashes with a <code>ValueError</code>. Part 5 shows you how to handle that.</p></div></section><section class="topic" id="p1-cleaning-up-text"><h3>Cleaning up text</h3><p class="intro">People type messy things: extra spaces, odd capitals. Python has built-in tools for text, used with a dot, like <code>name.strip()</code>. These dot tools are called <b>methods</b>. They give you a new, clean copy and leave the original as it was.</p><div class="example"><p class="say">Someone typed their city with extra spaces and all capitals. Let's clean it up.</p><div class="code-box"><div class="bar"><span class="label">Example 1.21</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">city = "  MYSURU  "
+
+print(city.strip())           # Removes extra spaces
+print(city.strip().lower())   # Small letters
+print(city.strip().title())   # First letter capital
+print(len(city))              # Counts the characters
+print(city)                   # The original hasn't changed</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">MYSURU
+mysuru
+Mysuru
+10
+  MYSURU  </pre></details></div><div class="example"><p class="say">Search inside text, break it into pieces, and join pieces back together.</p><div class="code-box"><div class="bar"><span class="label">Example 1.22</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">address = "12, MG Road, Bengaluru, 560001"
+
+print("Bengaluru" in address)       # Is this word inside?
+print(address.split(", "))          # Cut at each comma
+print(" to ".join(["Mysuru", "Bengaluru"]))   # Join with " to "
+print(address.replace("MG Road", "Brigade Road"))</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">True
+['12', 'MG Road', 'Bengaluru', '560001']
+Mysuru to Bengaluru
+12, Brigade Road, Bengaluru, 560001</pre></details></div><div class="example"><p class="say">A few more text tools: change case, count a letter, find a position and check what kind of text it is. Most of them answer <code>True</code> or <code>False</code>.</p><div class="code-box"><div class="bar"><span class="label">Example 1.23</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">name = "asha rao"
+print(name.upper())
+print(name.capitalize())
+print(name.count("a"))        # How many times does "a" appear?
+print(name.find("rao"))       # Where does "rao" start?
+
+file_name = "bill.pdf"
+print(file_name.startswith("bill"))
+print(file_name.endswith(".pdf"))
+
+print("560011".isdigit())     # Only digits?
+print("Asha".isalpha())       # Only letters?</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">ASHA RAO
+Asha rao
+3
+5
+True
+True
+True
+True</pre></details></div><div class="example"><p class="say">Pick out parts of text by position. Python starts counting from <b>0</b>, not 1. Choosing a range of positions is called <b>slicing</b>.</p><div class="code-box"><div class="bar"><span class="label">Example 1.24</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">pin = "560011"
+#      012345   &lt;-- positions start at 0
+
+print(pin[0])      # First character
+print(pin[-1])     # Last character
+print(pin[0:3])    # Positions 0, 1 and 2 (it stops before 3)
+print(pin[3:])     # From position 3 to the end
+print(pin[::2])    # Every second character
+print(pin[::-1])   # Backwards</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">5
+1
+560
+011
+501
+110065</pre></details></div><div class="example"><p class="say">This one fails on purpose. Text can't be changed one letter at a time. Tools like <code>.replace()</code> make a new copy instead.</p><div class="code-box"><div class="bar"><span class="label">Example 1.25</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">pin = "560011"
+pin[0] = "6"</code></pre></div><details class="output"><summary>Show the error</summary><p class="err-label">Error, last line:</p><pre class="stderr">TypeError: 'str' object does not support item assignment</pre></details></div><div class="task"><p class="task-tag">Your turn</p><h4>Print a UPI payment receipt</h4><ol><li>Ask for the shop name, the amount and the customer's name.</li><li>Add 5% tax: multiply the amount by 1.05.</li><li>Print a receipt with the name neatly capitalised and the total to 2 decimal places.</li></ol><details class="answer"><summary>Show one possible answer</summary><div class="code-box"><div class="bar"><span class="label">Answer</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">shop = input("Shop: ")
+amount = float(input("Amount: "))
+customer = input("Customer: ")
+
+total = amount * 1.05
+
+print("--- Receipt ---")
+print(f"Shop: {shop}")
+print(f"Paid by: {customer.strip().title()}")
+print(f"Total with tax: Rs {total:.2f}")</code></pre></div><p class="typed">Sample run, typing: <code>Nandini Parlour</code>, <code>200</code>, <code>  asha rao </code></p><p class="err-label ok">Output:</p><pre class="stdout">Shop: Nandini Parlour
+Amount: 200
+Customer:   asha rao 
+--- Receipt ---
+Shop: Nandini Parlour
+Paid by: Asha Rao
+Total with tax: Rs 210.00</pre></details></div></section></section><section class="part amber" id="part-2"><header class="part-head"><p class="kicker">Part 2</p><h2>Lists, Tuples, Sets and Dictionaries</h2><p class="goal">By the end, you can keep many values together and choose the right container for the job.</p><ol class="toc"><li><a href="#p2-lists-python-s-arrays">Lists: Python's arrays</a></li><li><a href="#p2-changing-a-list">Changing a list</a></li><li><a href="#p2-tuples-a-list-that-can-t-change">Tuples: a list that can't change</a></li><li><a href="#p2-sets-no-repeats">Sets: no repeats</a></li><li><a href="#p2-dictionaries-look-up-by-name">Dictionaries: look up by name</a></li><li><a href="#p2-nesting-containers-inside-containers">Nesting: containers inside containers</a></li></ol></header><section class="topic" id="p2-lists-python-s-arrays"><h3>Lists: Python's arrays</h3><p class="intro">A <b>list</b> keeps many values in one place, in order. Other languages call this an <b>array</b>. Write it with square brackets <code>[ ]</code>. Remember, positions start at 0.</p><p class="like"><b>Think of it like:</b> A shopping list. Item 0 is at the top, and you can add or cross out items whenever you like.</p><div class="example"><p class="say">A list of cities on a bus route. Pick items by position, count them, and check whether a city is on the route.</p><div class="code-box"><div class="bar"><span class="label">Example 2.1</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">stops = ["Bengaluru", "Mandya", "Mysuru", "Nanjangud"]
+
+print(stops)
+print(stops[0])       # First stop
+print(stops[-1])      # Last stop
+print(stops[1:3])     # Positions 1 and 2
+print(len(stops))     # How many stops?
+print("Mysuru" in stops)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">['Bengaluru', 'Mandya', 'Mysuru', 'Nanjangud']
+Bengaluru
+Nanjangud
+['Mandya', 'Mysuru']
+4
+True</pre></details></div><div class="example"><p class="say">One list can hold different kinds of values together.</p><div class="code-box"><div class="bar"><span class="label">Example 2.2</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">student = ["Asha", 24, 88.5, True]
+
+print(student)
+print(student[2])</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">['Asha', 24, 88.5, True]
+88.5</pre></details></div></section><section class="topic" id="p2-changing-a-list"><h3>Changing a list</h3><p class="intro">Lists can grow, shrink and change. Each of these tools does one simple job.</p><p class="like"><b>Think of it like:</b> Editing your shopping list: add milk, cross out dal, change rice to ragi.</p><div class="example"><p class="say">Add, replace and remove items from a kirana shopping list.</p><div class="code-box"><div class="bar"><span class="label">Example 2.3</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">shopping = ["rice", "dal"]
+
+shopping.append("milk")         # Add to the end
+shopping.insert(0, "coffee")    # Add at position 0
+print(shopping)
+
+shopping[1] = "ragi"            # Replace position 1
+print(shopping)
+
+shopping.remove("dal")          # Remove by name
+last_item = shopping.pop()      # Take off the last item
+print(last_item)
+print(shopping)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">['coffee', 'rice', 'dal', 'milk']
+['coffee', 'ragi', 'dal', 'milk']
+milk
+['coffee', 'ragi']</pre></details></div><div class="example"><p class="say">Exam marks: find the total, the highest, the lowest and the marks in order.</p><div class="code-box"><div class="bar"><span class="label">Example 2.4</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">marks = [72, 45, 88, 45, 60]
+
+print(sum(marks), max(marks), min(marks))
+print(marks.count(45))     # How many students got 45?
+
+print(sorted(marks))       # A new sorted list
+print(marks)               # The original stays the same
+
+marks.sort(reverse=True)   # Sorts this list, highest first
+print(marks)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">310 88 45
+2
+[45, 45, 60, 72, 88]
+[72, 45, 88, 45, 60]
+[88, 72, 60, 45, 45]</pre></details></div><div class="example"><p class="say">A common surprise: <code>b = a</code> doesn't make a copy. It's a second name for the same list. Use <code>.copy()</code> to get a real copy.</p><div class="code-box"><div class="bar"><span class="label">Example 2.5</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">my_list = ["rice", "dal"]
+
+same_list = my_list         # Same list, second name
+same_list.append("milk")
+print(my_list)              # Milk appears here too!
+
+my_copy = my_list.copy()    # A real, separate copy
+my_copy.append("ghee")
+print(my_list)
+print(my_copy)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">['rice', 'dal', 'milk']
+['rice', 'dal', 'milk']
+['rice', 'dal', 'milk', 'ghee']</pre></details><p class="note-line">Think of a shared Google Sheet versus downloading your own copy. Everyone sees changes to the shared one, but changes to your copy stay with you.</p></div><div class="example"><p class="say">More list tools: start with an empty list, join two lists, remove by position, turn a list around and empty it.</p><div class="code-box"><div class="bar"><span class="label">Example 2.6</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">menu = []                        # An empty list
+print(len(menu))
+
+morning = ["idli", "dosa"]
+evening = ["poori", "chapati"]
+
+all_day = morning + evening      # Join into a new list
+print(all_day)
+
+morning.extend(evening)          # Add all of them to morning
+print(morning)
+
+morning.pop(0)                   # Remove position 0
+del morning[0]                   # Another way to remove by position
+print(morning)
+
+morning.reverse()                # Turn the list around
+print(morning)
+
+print("idli" not in morning)     # Is it missing from the list?
+print(["tea"] * 3)               # Repeat a list
+
+morning.clear()                  # Empty the list
+print(morning)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">0
+['idli', 'dosa', 'poori', 'chapati']
+['idli', 'dosa', 'poori', 'chapati']
+['poori', 'chapati']
+['chapati', 'poori']
+True
+['tea', 'tea', 'tea']
+[]</pre></details></div><div class="example"><p class="say">Slices work on lists too, the same way as text. Choose every second item, or go backwards.</p><div class="code-box"><div class="bar"><span class="label">Example 2.7</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+
+print(days[:3])       # First three
+print(days[-2:])      # Last two
+print(days[::2])      # Every second day
+print(days[::-1])     # Backwards</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">['Mon', 'Tue', 'Wed']
+['Fri', 'Sat']
+['Mon', 'Wed', 'Fri']
+['Sat', 'Fri', 'Thu', 'Wed', 'Tue', 'Mon']</pre></details></div><div class="example"><p class="say">A list can hold other lists, which makes a table: each inner list is one row. Choose the row first, then the column.</p><div class="code-box"><div class="bar"><span class="label">Example 2.8</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python"># Each row is one student's marks: maths, science
+marks = [
+    [72, 88],
+    [65, 90],
+    [50, 75],
+]
+
+print(marks[1])       # Second student
+print(marks[1][0])    # Second student's maths mark
+print(len(marks))     # How many students?</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">[65, 90]
+65
+3</pre></details></div></section><section class="topic" id="p2-tuples-a-list-that-can-t-change"><h3>Tuples: a list that can't change</h3><p class="intro">A <b>tuple</b> is like a list, but once it's made, it can't be changed. Write it with round brackets <code>( )</code>. Use it for values that belong together and should stay fixed. To "add" a value, you make a new tuple, and the examples below show you how.</p><p class="like"><b>Think of it like:</b> A printed wedding card. You can't add a name to a card that's already printed, but you can print a new card with the extra name.</p><div class="example"><p class="say">A date of birth stored as a tuple. You can read it, and you can "unpack" it, which means giving each value its own name in one line.</p><div class="code-box"><div class="bar"><span class="label">Example 2.9</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">birthday = (15, "August", 1998)
+
+print(birthday[1])
+print(len(birthday))
+
+day, month, year = birthday      # Unpacking
+print(f"Born in {month} {year}")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">August
+3
+Born in August 1998</pre></details></div><div class="example"><p class="say">This one fails on purpose, to show that a tuple can't be changed.</p><div class="code-box"><div class="bar"><span class="label">Example 2.10</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">birthday = (15, "August", 1998)
+birthday[0] = 20</code></pre></div><details class="output"><summary>Show the error</summary><p class="err-label">Error, last line:</p><pre class="stderr">TypeError: 'tuple' object does not support item assignment</pre></details><p class="note-line">That's the whole point of a tuple: nobody can change it by accident.</p></div><div class="example"><p class="say">A tuple has no <code>.append()</code>, so this one fails on purpose.</p><div class="code-box"><div class="bar"><span class="label">Example 2.11</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">route = ("Bengaluru", "Mandya")
+route.append("Mysuru")</code></pre></div><details class="output"><summary>Show the error</summary><p class="err-label">Error, last line:</p><pre class="stderr">AttributeError: 'tuple' object has no attribute 'append'</pre></details></div><div class="example"><p class="say"><b>How to add to a tuple.</b> Use <code>+</code> to make a new tuple with the extra value, and save it under the same name. For one value, you must write a comma: <code>("Mysuru",)</code>. Without the comma, it's just text in brackets.</p><div class="code-box"><div class="bar"><span class="label">Example 2.12</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">route = ("Bengaluru", "Mandya")
+
+route = route + ("Mysuru",)            # Add at the end
+print(route)
+
+route = ("Kengeri",) + route           # Add at the start
+print(route)
+
+route = route + ("Nanjangud", "Ooty")  # Add several
+print(route)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">('Bengaluru', 'Mandya', 'Mysuru')
+('Kengeri', 'Bengaluru', 'Mandya', 'Mysuru')
+('Kengeri', 'Bengaluru', 'Mandya', 'Mysuru', 'Nanjangud', 'Ooty')</pre></details></div><div class="example"><p class="say"><b>How to change or remove a value.</b> Convert the tuple to a list, change the list, then convert it back. This also works for adding a value in the middle.</p><div class="code-box"><div class="bar"><span class="label">Example 2.13</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">route = ("Bengaluru", "Mandya", "Mysuru")
+
+stops = list(route)            # Tuple to list
+stops.insert(1, "Ramanagara")  # Add in the middle
+stops.remove("Mandya")         # Remove one
+stops[0] = "Majestic"          # Change one
+
+route = tuple(stops)           # List back to tuple
+print(route)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">('Majestic', 'Ramanagara', 'Mysuru')</pre></details></div><div class="example"><p class="say">Everything that only reads a value works just like a list: position, slice, <code>in</code>, <code>len()</code>, <code>count()</code>, <code>index()</code> and loops.</p><div class="code-box"><div class="bar"><span class="label">Example 2.14</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">scores = (45, 72, 45, 90)
+
+print(scores[0], scores[-1])
+print(scores[1:3])
+print(90 in scores)
+print(len(scores), sum(scores), max(scores))
+print(scores.count(45))     # How many times is 45 there?
+print(scores.index(90))     # At what position is 90?
+
+for score in scores:
+    print(score)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">45 90
+(72, 45)
+True
+4 252 90
+2
+3
+45
+72
+45
+90</pre></details></div><div class="example"><p class="say">Three things to know: one value needs a comma, brackets are optional, and a list can hold many tuples.</p><div class="code-box"><div class="bar"><span class="label">Example 2.15</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">print(type((5)))        # Just the number 5
+print(type((5,)))       # A tuple with one value
+
+city = "Mysuru", 570001  # Brackets are optional
+print(city)
+
+price_list = [("Idli", 30), ("Dosa", 60)]
+for dish, price in price_list:
+    print(f"{dish}: Rs {price}")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">&lt;class 'int'&gt;
+&lt;class 'tuple'&gt;
+('Mysuru', 570001)
+Idli: Rs 30
+Dosa: Rs 60</pre></details></div></section><section class="topic" id="p2-sets-no-repeats"><h3>Sets: no repeats</h3><p class="intro">A <b>set</b> keeps each value only once, and in no fixed order. Use it to remove repeats or to compare two groups.</p><p class="like"><b>Think of it like:</b> An attendance register. However many times a student walks in, their name counts once.</p><div class="example"><p class="say">Students who came to class, with some names repeated. A set removes the repeats. <code>sorted()</code> puts them in A to Z order, so they're easy to read.</p><div class="code-box"><div class="bar"><span class="label">Example 2.16</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">entries = ["Asha", "Ravi", "Asha", "Meena", "Ravi"]
+
+present = set(entries)
+print(len(entries), len(present))
+print(sorted(present))
+print("Meena" in present)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">5 3
+['Asha', 'Meena', 'Ravi']
+True</pre></details></div><div class="example"><p class="say">Compare two groups of friends: who's in both, who's in either, and who's only in the first.</p><div class="code-box"><div class="bar"><span class="label">Example 2.17</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">cricket = {"Asha", "Ravi", "Meena"}
+music = {"Ravi", "Meena", "Kiran"}
+
+print(sorted(cricket &amp; music))    # In both groups
+print(sorted(cricket | music))    # In either group
+print(sorted(cricket - music))    # Only in cricket</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">['Meena', 'Ravi']
+['Asha', 'Kiran', 'Meena', 'Ravi']
+['Asha']</pre></details></div><div class="example"><p class="say">Changing a set: <code>add()</code> puts in one value, <code>update()</code> puts in many, and <code>remove()</code> and <code>discard()</code> take one out. The difference is that <code>remove()</code> crashes if the value is missing, and <code>discard()</code> doesn't.</p><div class="code-box"><div class="bar"><span class="label">Example 2.18</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">present = set()              # An empty set. {} would make a dictionary
+present.add("Asha")
+present.add("Ravi")
+present.add("Asha")          # Already there, so nothing changes
+print(sorted(present))
+
+present.update(["Meena", "Kiran"])
+print(sorted(present))
+
+present.remove("Ravi")
+present.discard("Sunil")     # Not there, and no crash
+print(sorted(present))
+
+for name in sorted(present):
+    print(f"Present: {name}")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">['Asha', 'Ravi']
+['Asha', 'Kiran', 'Meena', 'Ravi']
+['Asha', 'Kiran', 'Meena']
+Present: Asha
+Present: Kiran
+Present: Meena</pre></details><p class="note-line">A set has no positions, so <code>present[0]</code> gives a <code>TypeError</code>. If you need positions, use a list.</p></div></section><section class="topic" id="p2-dictionaries-look-up-by-name"><h3>Dictionaries: look up by name</h3><p class="intro">A <b>dictionary</b> stores pairs: a <b>key</b>, which is what you look up, and a <b>value</b>, which is what you get back. Write it with curly brackets <code>{ }</code>. This is the most important type in this course, because most of the data AI tools send back looks like this.</p><p class="like"><b>Think of it like:</b> A hotel menu. Find the dish name (the key) and you get the price (the value).</p><div class="example"><p class="say">A darshini menu. Look up a price, add a dish, change a price and remove a dish.</p><div class="code-box"><div class="bar"><span class="label">Example 2.19</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">menu = {"idli": 30, "dosa": 60, "coffee": 25}
+
+print(menu)
+print(menu["dosa"])       # What does a dosa cost?
+
+menu["vada"] = 35         # Add a new dish
+menu["coffee"] = 30       # Change a price
+del menu["idli"]          # Remove a dish
+print(menu)
+
+print(len(menu))
+print("dosa" in menu)     # Is this dish on the menu?</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">{'idli': 30, 'dosa': 60, 'coffee': 25}
+60
+{'dosa': 60, 'coffee': 30, 'vada': 35}
+3
+True</pre></details></div><div class="example"><p class="say">This one fails on purpose. Asking for a dish that isn't on the menu stops the program.</p><div class="code-box"><div class="bar"><span class="label">Example 2.20</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">menu = {"idli": 30, "dosa": 60}
+print(menu["pizza"])</code></pre></div><details class="output"><summary>Show the error</summary><p class="err-label">Error, last line:</p><pre class="stderr">KeyError: 'pizza'</pre></details><p class="note-line">The next example shows the polite way to ask.</p></div><div class="example"><p class="say"><code>.get()</code> is the safe way to ask. If the dish isn't there, you get <code>None</code> or your own answer, and the program doesn't stop. You can also list all the keys and values.</p><div class="code-box"><div class="bar"><span class="label">Example 2.21</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">menu = {"idli": 30, "dosa": 60}
+
+print(menu.get("dosa"))
+print(menu.get("pizza"))
+print(menu.get("pizza", "Not on the menu"))
+
+print(list(menu.keys()))
+print(list(menu.values()))
+print(list(menu.items()))</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">60
+None
+Not on the menu
+['idli', 'dosa']
+[30, 60]
+[('idli', 30), ('dosa', 60)]</pre></details></div><div class="example"><p class="say">More dictionary tools: start empty, change many values at once, remove a key and get its value back, make a copy and empty it. Each key can appear only once, so a repeated key keeps the last value.</p><div class="code-box"><div class="bar"><span class="label">Example 2.22</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">student = {}                       # An empty dictionary
+student["name"] = "Asha"
+student.update({"age": 24, "city": "Mysuru"})
+print(student)
+
+city = student.pop("city")         # Remove it and get the value
+print(city)
+print(student.pop("phone", "No phone saved"))   # Safe if it's missing
+
+backup = student.copy()            # A separate copy
+student.clear()                    # Empty it
+print(student)
+print(backup)
+
+print({"idli": 30, "idli": 40})    # A repeated key keeps the last value</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">{'name': 'Asha', 'age': 24, 'city': 'Mysuru'}
+Mysuru
+No phone saved
+{}
+{'name': 'Asha', 'age': 24}
+{'idli': 40}</pre></details></div><div class="example"><p class="say">Add to a count without first checking whether the key exists. <code>setdefault()</code> adds a key only if it's missing.</p><div class="code-box"><div class="bar"><span class="label">Example 2.23</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">stock = {"rice": 10}
+
+stock.setdefault("rice", 0)      # Already there, so no change
+stock.setdefault("dal", 0)       # Missing, so it's added
+stock["dal"] += 5
+
+print(stock)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">{'rice': 10, 'dal': 5}</pre></details></div></section><section class="topic" id="p2-nesting-containers-inside-containers"><h3>Nesting: containers inside containers</h3><p class="intro">A list can sit inside a dictionary, and a dictionary inside a list. To reach a value, go one step at a time from the outside in.</p><p class="like"><b>Think of it like:</b> A tiffin box inside a bag. First open the bag, then the box, then take out the idli.</p><div class="example"><p class="say">A contact in your phone: one person, with a list of numbers and an address inside.</p><div class="code-box"><div class="bar"><span class="label">Example 2.24</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">contact = {
+    "name": "Asha",
+    "phones": ["98000 00001", "98000 00002"],
+    "address": {"city": "Mysuru", "pin": "570001"},
+}
+
+print(contact["name"])
+print(contact["phones"][1])        # Second phone number
+print(contact["address"]["city"])  # Inside the address</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Asha
+98000 00002
+Mysuru</pre></details></div><div class="example"><p class="say">When an app asks another service for data, the answer looks like this. It's the same shape you'll meet in Session 1, when you ask for details of a PIN code.</p><div class="code-box"><div class="bar"><span class="label">Example 2.25</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">result = {
+    "post code": "560011",
+    "country": "India",
+    "places": [
+        {"place name": "Jayanagar", "state": "Karnataka"},
+        {"place name": "Madhavanpark", "state": "Karnataka"},
+    ],
+}
+
+print(result["post code"])
+print(result["places"][0]["place name"])   # places, first one, its name
+print(len(result["places"]))</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">560011
+Jayanagar
+2</pre></details></div><div class="example"><p class="say">A dictionary can hold other dictionaries, like a register with one page for each student.</p><div class="code-box"><div class="bar"><span class="label">Example 2.26</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">students = {
+    "Asha": {"age": 24, "city": "Mysuru"},
+    "Ravi": {"age": 26, "city": "Hubballi"},
+}
+
+print(students["Ravi"]["city"])
+
+students["Meena"] = {"age": 22, "city": "Hassan"}    # Add a new page
+print(len(students))</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Hubballi
+3</pre></details></div><div class="example"><p class="say">You can change one kind of container into another. For example, remove repeats with a set, then go back to a list.</p><div class="code-box"><div class="bar"><span class="label">Example 2.27</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">names = ["Asha", "Ravi", "Asha"]
+
+print(sorted(set(names)))       # List to set, to remove repeats
+print(tuple(names))             # List to tuple
+print(list("idli"))             # Text to a list of letters
+
+dishes = ["idli", "dosa"]
+prices = [30, 60]
+print(dict(zip(dishes, prices)))    # Two lists to a dictionary</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">['Asha', 'Ravi']
+('Asha', 'Ravi', 'Asha')
+['i', 'd', 'l', 'i']
+{'idli': 30, 'dosa': 60}</pre></details></div><div class="table-wrap"><table><thead><tr><th scope="col">Choose a</th><th scope="col">When</th><th scope="col">Everyday example</th></tr></thead><tbody><tr><td><code>list [ ]</code></td><td>Order matters and items can change</td><td>Shopping list</td></tr><tr><td><code>tuple ( )</code></td><td>Values stay together and never change</td><td>Date of birth</td></tr><tr><td><code>set { }</code></td><td>You want no repeats</td><td>Attendance register</td></tr><tr><td><code>dict { : }</code></td><td>You look things up by name</td><td>Hotel menu</td></tr></tbody></table></div><div class="task"><p class="task-tag">Your turn</p><h4>Add a stop to a bus route</h4><ol><li>Make a tuple: <code>route = ("Bengaluru", "Mysuru")</code></li><li>Add <code>"Mangaluru"</code> at the end, using <code>+</code>.</li><li>Convert it to a list, put <code>"Mandya"</code> in position 1, and convert it back to a tuple.</li><li>Print the route and the number of stops.</li></ol><details class="answer"><summary>Show one possible answer</summary><div class="code-box"><div class="bar"><span class="label">Answer</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">route = ("Bengaluru", "Mysuru")
+route = route + ("Mangaluru",)
+
+stops = list(route)
+stops.insert(1, "Mandya")
+route = tuple(stops)
+
+print(route)
+print(len(route))</code></pre></div><p class="err-label ok">Output:</p><pre class="stdout">('Bengaluru', 'Mandya', 'Mysuru', 'Mangaluru')
+4</pre></details></div><div class="task"><p class="task-tag">Your turn</p><h4>Order at a darshini</h4><ol><li>Make a <code>menu</code> dictionary with 3 dishes and their prices.</li><li>Make an <code>order</code> list with 2 of those dishes, then add a third.</li><li>Print the price of the first dish in your order.</li><li>Print how many dishes you ordered, and use <code>.get()</code> to ask for a dish that isn't on the menu.</li></ol><details class="answer"><summary>Show one possible answer</summary><div class="code-box"><div class="bar"><span class="label">Answer</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">menu = {"idli": 30, "dosa": 60, "coffee": 25}
+order = ["idli", "coffee"]
+
+order.append("dosa")
+
+print(menu[order[0]])
+print(len(order))
+print(menu.get("pizza", "Not on the menu"))</code></pre></div><p class="err-label ok">Output:</p><pre class="stdout">30
+3
+Not on the menu</pre></details></div><div class="task"><p class="task-tag">Your turn</p><h4>Read a student's report card</h4><ol><li>Make a dictionary with a <code>name</code>, a <code>school</code> dictionary containing a name and a city, and a <code>marks</code> list of 3 numbers.</li><li>Print the school's city.</li><li>Print the second mark.</li><li>Print the total of all the marks.</li></ol><details class="answer"><summary>Show one possible answer</summary><div class="code-box"><div class="bar"><span class="label">Answer</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">student = {
+    "name": "Ravi",
+    "school": {"name": "Government High School", "city": "Hubballi"},
+    "marks": [72, 88, 65],
+}
+
+print(student["school"]["city"])
+print(student["marks"][1])
+print(sum(student["marks"]))</code></pre></div><p class="err-label ok">Output:</p><pre class="stdout">Hubballi
+88
+225</pre></details></div></section></section><section class="part blue" id="part-3"><header class="part-head"><p class="kicker">Part 3</p><h2>Conditions and Loops</h2><p class="goal">By the end, your program can make decisions and repeat work, so it can handle a long list by itself.</p><ol class="toc"><li><a href="#p3-asking-yes-or-no-questions">Asking yes or no questions</a></li><li><a href="#p3-if-elif-and-else-making-decisions">if, elif and else: making decisions</a></li><li><a href="#p3-empty-means-no">Empty means no</a></li><li><a href="#p3-for-loops-do-it-for-each-one">for loops: do it for each one</a></li><li><a href="#p3-while-loops-keep-going-until">while loops: keep going until</a></li><li><a href="#p3-break-continue-and-pass-changing-the-loop">break, continue and pass: changing the loop</a></li><li><a href="#p3-a-loop-inside-a-loop">A loop inside a loop</a></li><li><a href="#p3-comprehensions-a-loop-in-one-line">Comprehensions: a loop in one line</a></li></ol></header><section class="topic" id="p3-asking-yes-or-no-questions"><h3>Asking yes or no questions</h3><p class="intro">A comparison is a question with only two answers: <code>True</code> or <code>False</code>. Use <code>and</code>, <code>or</code> and <code>not</code> to combine questions.</p><p class="like"><b>Think of it like:</b> A bank checking a loan: "Is the salary above Rs 30,000 <b>and</b> is the age above 21?"</p><div class="example"><p class="say">Is this person allowed to vote or get a loan? Note that one <code>=</code> stores a value, while two <code>==</code> ask "are these equal?"</p><div class="code-box"><div class="bar"><span class="label">Example 3.1</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">age = 20
+salary = 25000
+
+print(age == 18)      # Is age equal to 18?
+print(age != 18)      # Is age not equal to 18?
+print(age &gt;= 18)      # Can this person vote?
+
+print(age &gt; 21 and salary &gt; 30000)   # Both must be true
+print(age &gt; 21 or salary &gt; 20000)    # Any one can be true
+print(not age &gt;= 18)                 # Flips the answer</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">False
+True
+True
+False
+True
+False</pre></details></div><div class="example"><p class="say">More ways to ask: <code>in</code> and <code>not in</code> check whether something is inside, comparisons can be chained, and capital letters matter when comparing text.</p><div class="code-box"><div class="bar"><span class="label">Example 3.2</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">age = 30
+cities = ["Mysuru", "Hubballi"]
+
+print(18 &lt;= age &lt;= 60)            # Is age between 18 and 60?
+print("Hassan" in cities)
+print("Hassan" not in cities)
+
+print("Asha" == "asha")           # Capital letters matter
+print("Asha".lower() == "asha")   # Make both small to compare</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">True
+False
+True
+False
+True</pre></details></div></section><section class="topic" id="p3-if-elif-and-else-making-decisions"><h3>if, elif and else: making decisions</h3><p class="intro">Python checks each condition from top to bottom and does only the first one that's true. Two rules matter: end the question with a colon <code>:</code>, and move the lines inside to the right by <b>4 spaces</b>. That gap is called <b>indentation</b>, and it tells Python which lines belong inside.</p><p class="like"><b>Think of it like:</b> "If it's raining, take an umbrella. Otherwise, wear sunglasses."</p><div class="example"><p class="say">A shop gives free delivery above Rs 500. Change <code>amount</code> to 600 and run it again.</p><div class="code-box"><div class="bar"><span class="label">Example 3.3</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">amount = 450
+
+if amount &gt;= 500:
+    print("Free delivery!")
+else:
+    print(f"Add Rs {500 - amount} more for free delivery")
+
+print("Thank you for shopping")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Add Rs 50 more for free delivery
+Thank you for shopping</pre></details></div><div class="example"><p class="say"><code>elif</code> means "otherwise, if". Use it when there are more than two choices, like exam grades.</p><div class="code-box"><div class="bar"><span class="label">Example 3.4</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">marks = 72
+
+if marks &gt;= 85:
+    grade = "A"
+elif marks &gt;= 60:
+    grade = "B"
+elif marks &gt;= 35:
+    grade = "C"
+else:
+    grade = "Fail"
+
+print(f"Your grade: {grade}")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Your grade: B</pre></details></div><div class="example"><p class="say">Ask a person for their age, then decide what the ticket costs.</p><div class="code-box"><div class="bar"><span class="label">Example 3.5</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">age = int(input("Your age: "))
+
+if age &lt; 5:
+    print("Free ticket")
+elif age &lt; 60:
+    print("Ticket: Rs 100")
+else:
+    print("Senior citizen ticket: Rs 50")</code></pre></div><p class="typed">Sample run, typing: <code>34</code></p><details class="output"><summary>Show output</summary><pre class="stdout">Your age: 34
+Ticket: Rs 100</pre></details><p class="note-line">Run this 3 times, with <code>3</code>, <code>34</code> and <code>65</code>.</p></div><div class="example"><p class="say">This one fails on purpose. It's the error beginners see most: the line inside the <code>if</code> has no spaces in front of it.</p><div class="code-box"><div class="bar"><span class="label">Example 3.6</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">amount = 750
+if amount &gt; 500:
+print("Big order")</code></pre></div><details class="output"><summary>Show the error</summary><p class="err-label">Error, last line:</p><pre class="stderr">IndentationError: expected an indented block after 'if' statement on line 2</pre></details><p class="note-line">To fix it, add 4 spaces before <code>print</code>.</p></div><div class="example"><p class="say">An <code>if</code> can sit inside another <code>if</code>, like an ATM: first it checks your PIN, and only then checks your balance.</p><div class="code-box"><div class="bar"><span class="label">Example 3.7</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">pin_correct = True
+balance = 3000
+withdraw = 5000
+
+if pin_correct:
+    if balance &gt;= withdraw:
+        print("Please collect your cash")
+    else:
+        print("Not enough balance")
+else:
+    print("Wrong PIN")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Not enough balance</pre></details></div></section><section class="topic" id="p3-empty-means-no"><h3>Empty means no</h3><p class="intro">Python treats empty things as false: empty text <code>""</code>, an empty list <code>[]</code>, an empty dictionary <code>{}</code>, the number <code>0</code> and <code>None</code>. So you can simply ask, "is there anything here?"</p><div class="example"><p class="say">Check whether a shopping cart has anything in it, and whether a coupon was entered.</p><div class="code-box"><div class="bar"><span class="label">Example 3.8</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">cart = []
+
+if cart:
+    print("Ready to pay")
+else:
+    print("Your cart is empty")
+
+coupon = None
+if coupon is None:          # "is None" checks for nothing
+    print("No coupon used")
+
+cups = 3
+word = "cup" if cups == 1 else "cups"    # A short if, in one line
+print(f"{cups} {word}")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Your cart is empty
+No coupon used
+3 cups</pre></details></div></section><section class="topic" id="p3-for-loops-do-it-for-each-one"><h3>for loops: do it for each one</h3><p class="intro">A <code>for</code> loop repeats some work once for every item in a list. Use it any time you have a list of anything. The indented lines repeat, and the rest don't.</p><p class="like"><b>Think of it like:</b> A teacher going down the register, calling out each student's name, one by one.</p><div class="example"><p class="say">Send a message to each person. Python takes one name at a time and repeats the indented line.</p><div class="code-box"><div class="bar"><span class="label">Example 3.9</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">friends = ["Asha", "Ravi", "Meena"]
+
+for friend in friends:
+    print(f"Happy Ugadi, {friend}!")
+
+print("All messages sent")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Happy Ugadi, Asha!
+Happy Ugadi, Ravi!
+Happy Ugadi, Meena!
+All messages sent</pre></details></div><div class="example"><p class="say"><code>range()</code> makes a series of numbers for you. It stops <b>before</b> the last number. Here, it's a times table.</p><div class="code-box"><div class="bar"><span class="label">Example 3.10</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">print(list(range(5)))         # 0 to 4
+print(list(range(1, 6)))      # 1 to 5
+print(list(range(0, 20, 5)))  # Count in steps of 5
+
+for number in range(1, 6):
+    print(f"5 x {number} = {5 * number}")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">[0, 1, 2, 3, 4]
+[1, 2, 3, 4, 5]
+[0, 5, 10, 15]
+5 x 1 = 5
+5 x 2 = 10
+5 x 3 = 15
+5 x 4 = 20
+5 x 5 = 25</pre></details></div><div class="example"><p class="say">The most useful pattern of all: start at zero and keep adding, just like totalling a bill by hand.</p><div class="code-box"><div class="bar"><span class="label">Example 3.11</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">prices = [120, 45, 300]
+total = 0
+
+for price in prices:
+    total += price
+    print(f"Added {price}, total so far is {total}")
+
+print(f"Final bill: Rs {total}")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Added 120, total so far is 120
+Added 45, total so far is 165
+Added 300, total so far is 465
+Final bill: Rs 465</pre></details></div><div class="example"><p class="say">Go through a dictionary. <code>.items()</code> gives you the dish and the price together, so you can print a whole menu.</p><div class="code-box"><div class="bar"><span class="label">Example 3.12</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">menu = {"idli": 30, "dosa": 60, "coffee": 25}
+
+for dish in menu:
+    print(dish)
+
+for dish, price in menu.items():
+    print(f"{dish}: Rs {price}")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">idli
+dosa
+coffee
+idli: Rs 30
+dosa: Rs 60
+coffee: Rs 25</pre></details></div><div class="example"><p class="say"><code>enumerate()</code> numbers your items. <code>zip()</code> walks through two lists side by side.</p><div class="code-box"><div class="bar"><span class="label">Example 3.13</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">subjects = ["Maths", "Science", "English"]
+marks = [72, 88, 65]
+
+for number, subject in enumerate(subjects, start=1):
+    print(f"{number}. {subject}")
+
+for subject, mark in zip(subjects, marks):
+    print(f"{subject}: {mark}")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">1. Maths
+2. Science
+3. English
+Maths: 72
+Science: 88
+English: 65</pre></details></div><div class="example"><p class="say">A loop and an <code>if</code> together: find the total sales for one city from a list of orders. You'll use this pattern with real data all the time.</p><div class="code-box"><div class="bar"><span class="label">Example 3.14</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">orders = [
+    {"customer": "Asha", "city": "Mysuru", "amount": 450},
+    {"customer": "Ravi", "city": "Hubballi", "amount": 1200},
+    {"customer": "Meena", "city": "Mysuru", "amount": 300},
+]
+
+mysuru_total = 0
+for order in orders:
+    if order["city"] == "Mysuru":
+        mysuru_total += order["amount"]
+
+print(f"Mysuru sales: Rs {mysuru_total}")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Mysuru sales: Rs 750</pre></details></div><div class="example"><p class="say">A loop also works on the letters of a word. To go backwards, use <code>reversed()</code> or a negative step in <code>range()</code>.</p><div class="code-box"><div class="bar"><span class="label">Example 3.15</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">for letter in "RAGI":
+    print(letter)
+
+for name in reversed(["Asha", "Ravi"]):
+    print(name)
+
+for count in range(3, 0, -1):     # A rocket countdown
+    print(count)
+print("Go!")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">R
+A
+G
+I
+Ravi
+Asha
+3
+2
+1
+Go!</pre></details></div></section><section class="topic" id="p3-while-loops-keep-going-until"><h3>while loops: keep going until</h3><p class="intro">A <code>while</code> loop keeps repeating as long as its condition is true. Use it when you don't know how many rounds you'll need.</p><p class="like"><b>Think of it like:</b> Calling a friend again and again until they pick up.</p><div class="example"><p class="say">Try calling up to 3 times. <code>attempt</code> goes up by 1 each round, and that's what makes the loop stop.</p><div class="code-box"><div class="bar"><span class="label">Example 3.16</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">attempt = 1
+
+while attempt &lt;= 3:
+    print(f"Call number {attempt}...")
+    attempt += 1
+
+print("Stopped calling")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Call number 1...
+Call number 2...
+Call number 3...
+Stopped calling</pre></details><p class="note-line">If you forget <code>attempt += 1</code>, the loop never ends. If that ever happens, press <code>Ctrl + C</code> in the terminal to stop it.</p></div><div class="example"><p class="say">Keep asking until the person types a 6-digit PIN code, just like a form on a shopping app.</p><div class="code-box"><div class="bar"><span class="label">Example 3.17</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">pin = input("PIN code: ")
+
+while len(pin) != 6:
+    print("A PIN code has 6 digits. Try again.")
+    pin = input("PIN code: ")
+
+print(f"Thank you. We'll deliver to {pin}")</code></pre></div><p class="typed">Sample run, typing: <code>5600</code>, <code>abc</code>, <code>560011</code></p><details class="output"><summary>Show output</summary><pre class="stdout">PIN code: 5600
+A PIN code has 6 digits. Try again.
+PIN code: abc
+A PIN code has 6 digits. Try again.
+PIN code: 560011
+Thank you. We'll deliver to 560011</pre></details></div><div class="example"><p class="say"><code>while True</code> means "keep going forever", and <code>break</code> is how you get out. Apps with a menu work like this: they keep running until you choose to exit.</p><div class="code-box"><div class="bar"><span class="label">Example 3.18</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">while True:
+    choice = input("Type balance or exit: ")
+    if choice == "exit":
+        print("Goodbye")
+        break
+    print("Your balance is Rs 3000")</code></pre></div><p class="typed">Sample run, typing: <code>balance</code>, <code>exit</code></p><details class="output"><summary>Show output</summary><pre class="stdout">Type balance or exit: balance
+Your balance is Rs 3000
+Type balance or exit: exit
+Goodbye</pre></details></div></section><section class="topic" id="p3-break-continue-and-pass-changing-the-loop"><h3>break, continue and pass: changing the loop</h3><p class="intro"><code>break</code> means "stop the loop now". <code>continue</code> means "skip this one and go to the next". <code>pass</code> means "do nothing here".</p><p class="like"><b>Think of it like:</b> Reading the newspaper: skip a story you don't like (<code>continue</code>), and stop reading when breakfast is ready (<code>break</code>).</p><div class="example"><p class="say">Go through today's expenses. Skip anything that's zero, and stop completely at a <code>-1</code>, which marks the end of the list.</p><div class="code-box"><div class="bar"><span class="label">Example 3.19</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">expenses = [450, 0, 300, -1, 900]
+
+for amount in expenses:
+    if amount == -1:
+        print("End of the list, stopping")
+        break
+    if amount == 0:
+        print("Nothing spent, skipping")
+        continue
+    print(f"Spent Rs {amount}")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Spent Rs 450
+Nothing spent, skipping
+Spent Rs 300
+End of the list, stopping</pre></details></div><div class="example"><p class="say">Find a name in a list and stop as soon as you've found it. There's no need to check the rest.</p><div class="code-box"><div class="bar"><span class="label">Example 3.20</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">names = ["Asha", "Ravi", "Meena", "Kiran"]
+
+for position, name in enumerate(names):
+    print(f"Checking {name}")
+    if name == "Ravi":
+        print(f"Found at position {position}")
+        break</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Checking Asha
+Checking Ravi
+Found at position 1</pre></details></div><div class="example"><p class="say"><code>pass</code> is an empty placeholder. Python doesn't allow an empty block, so you can use <code>pass</code> while you decide what goes there. A loop can also have an <code>else</code>, which runs only if the loop finished without <code>break</code>.</p><div class="code-box"><div class="bar"><span class="label">Example 3.21</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">for mark in [72, 20]:
+    if mark &lt; 35:
+        pass      # Decide later what to do here
+    else:
+        print(f"Passed with {mark}")
+
+for name in ["Asha", "Ravi"]:
+    if name == "Sunil":
+        print("Found Sunil")
+        break
+else:
+    print("Sunil isn't in the list")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Passed with 72
+Sunil isn't in the list</pre></details></div></section><section class="topic" id="p3-a-loop-inside-a-loop"><h3>A loop inside a loop</h3><p class="intro">The inner loop finishes all its rounds for each round of the outer loop.</p><p class="like"><b>Think of it like:</b> A clock: the minute hand goes all the way round for every single hour.</p><div class="example"><p class="say">A bus runs to each city in the morning and again in the evening.</p><div class="code-box"><div class="bar"><span class="label">Example 3.22</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">times = ["Morning", "Evening"]
+cities = ["Mysuru", "Hubballi"]
+
+for time in times:
+    for city in cities:
+        print(f"{time} bus to {city}")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Morning bus to Mysuru
+Morning bus to Hubballi
+Evening bus to Mysuru
+Evening bus to Hubballi</pre></details></div></section><section class="topic" id="p3-comprehensions-a-loop-in-one-line"><h3>Comprehensions: a loop in one line</h3><p class="intro">A comprehension makes a new list from an old one, in a single line. You don't have to write them yet, but real code uses them everywhere, so learn to read them.</p><div class="example"><p class="say">First the long way, then the same work in one line. Read it as: "give me <code>price + 10</code> for each price". You can also add an <code>if</code> to keep only some items.</p><div class="code-box"><div class="bar"><span class="label">Example 3.23</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">prices = [100, 250, 400]
+
+# The long way
+new_prices = []
+for price in prices:
+    new_prices.append(price + 10)
+print(new_prices)
+
+# The same thing in one line
+print([price + 10 for price in prices])
+
+# Keep only prices above 200
+print([price for price in prices if price &gt; 200])</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">[110, 260, 410]
+[110, 260, 410]
+[250, 400]</pre></details></div><div class="example"><p class="say">The same one-line style can build a dictionary or a set. Without square brackets, it can go straight into <code>sum()</code>.</p><div class="code-box"><div class="bar"><span class="label">Example 3.24</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">dishes = ["idli", "dosa"]
+print({dish: len(dish) for dish in dishes})     # A dictionary
+
+marks = [72, 45, 72]
+print(sorted({mark for mark in marks}))         # A set, with no repeats
+
+print(sum(mark for mark in marks if mark &gt; 50)) # Total above 50</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">{'idli': 4, 'dosa': 4}
+[45, 72]
+144</pre></details></div><div class="example"><p class="say"><code>any()</code> asks "is at least one true?" and <code>all()</code> asks "are all of them true?"</p><div class="code-box"><div class="bar"><span class="label">Example 3.25</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">marks = [72, 45, 30]
+
+print(any(mark &lt; 35 for mark in marks))    # Did anyone fail?
+print(all(mark &gt;= 35 for mark in marks))   # Did everyone pass?</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">True
+False</pre></details></div><div class="task"><p class="task-tag">Your turn</p><h4>Work out the delivery charge</h4><ol><li>Ask for the cart amount.</li><li>Rs 500 or more: free delivery. Rs 200 to 499: Rs 30. Below Rs 200: Rs 60.</li><li>Print the delivery charge and the final amount.</li></ol><details class="answer"><summary>Show one possible answer</summary><div class="code-box"><div class="bar"><span class="label">Answer</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">amount = int(input("Cart amount: "))
+
+if amount &gt;= 500:
+    charge = 0
+elif amount &gt;= 200:
+    charge = 30
+else:
+    charge = 60
+
+print(f"Delivery: Rs {charge}")
+print(f"Final amount: Rs {amount + charge}")</code></pre></div><p class="typed">Sample run, typing: <code>350</code></p><p class="err-label ok">Output:</p><pre class="stdout">Cart amount: 350
+Delivery: Rs 30
+Final amount: Rs 380</pre></details></div><div class="task"><p class="task-tag">Your turn</p><h4>Count the votes</h4><ol><li>Use this list: <code>votes = ["Asha", "Ravi", "Asha", "Meena", "Asha", "Ravi"]</code></li><li>Use a loop to build a dictionary that counts the votes for each person.</li><li>Print each person and their votes.</li><li>Hint: <code>counts.get(name, 0)</code> gives the count so far, or 0 for a new name.</li></ol><details class="answer"><summary>Show one possible answer</summary><div class="code-box"><div class="bar"><span class="label">Answer</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">votes = ["Asha", "Ravi", "Asha", "Meena", "Asha", "Ravi"]
+
+counts = {}
+for name in votes:
+    counts[name] = counts.get(name, 0) + 1
+
+for name, total in counts.items():
+    print(f"{name}: {total}")</code></pre></div><p class="err-label ok">Output:</p><pre class="stdout">Asha: 3
+Ravi: 2
+Meena: 1</pre></details></div><div class="task"><p class="task-tag">Your turn</p><h4>ATM PIN with 3 chances</h4><ol><li>Save a secret 4-digit PIN.</li><li>Give the person 3 chances to type it.</li><li>If it's right, print "Welcome" and stop. If it's wrong, say how many chances are left.</li></ol><details class="answer"><summary>Show one possible answer</summary><div class="code-box"><div class="bar"><span class="label">Answer</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">secret = "4321"
+
+for chance in range(3):
+    pin = input("Enter PIN: ")
+    if pin == secret:
+        print("Welcome")
+        break
+    print(f"Wrong PIN. Chances left: {2 - chance}")</code></pre></div><p class="typed">Sample run, typing: <code>1111</code>, <code>2222</code>, <code>4321</code></p><p class="err-label ok">Output:</p><pre class="stdout">Enter PIN: 1111
+Wrong PIN. Chances left: 2
+Enter PIN: 2222
+Wrong PIN. Chances left: 1
+Enter PIN: 4321
+Welcome</pre></details></div></section></section><section class="part violet" id="part-4"><header class="part-head"><p class="kicker">Part 4</p><h2>Functions and Imports</h2><p class="goal">By the end, you can save a piece of work under a name, reuse it, and use code other people wrote.</p><ol class="toc"><li><a href="#p4-functions-a-saved-recipe">Functions: a saved recipe</a></li><li><a href="#p4-return-handing-back-the-answer">return: handing back the answer</a></li><li><a href="#p4-giving-a-function-what-it-needs">Giving a function what it needs</a></li><li><a href="#p4-names-inside-a-function-stay-inside">Names inside a function stay inside</a></li><li><a href="#p4-labels-on-a-function">Labels on a function</a></li><li><a href="#p4-functions-in-a-dictionary">Functions in a dictionary</a></li><li><a href="#p4-things-to-recognise-not-memorise">Things to recognise, not memorise</a></li><li><a href="#p4-imports-using-ready-made-tools">Imports: using ready-made tools</a></li><li><a href="#p4-using-your-own-file">Using your own file</a></li><li><a href="#p4-classes-just-enough-to-read-them">Classes: just enough to read them</a></li></ol></header><section class="topic" id="p4-functions-a-saved-recipe"><h3>Functions: a saved recipe</h3><p class="intro">A <b>function</b> is a set of steps with a name. <code>def</code> saves the recipe, and nothing happens yet. It only runs when you <b>call</b> it by name, with brackets.</p><p class="like"><b>Think of it like:</b> A recipe card. Write it once, then use it any time without writing the steps again.</p><div class="example"><p class="say">One greeting recipe, used for two different people. The name in the brackets is what you hand to the function each time.</p><div class="code-box"><div class="bar"><span class="label">Example 4.1</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">def greet(name):
+    print(f"Namaskara, {name}!")
+
+greet("Asha")
+greet("Ravi")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Namaskara, Asha!
+Namaskara, Ravi!</pre></details></div></section><section class="topic" id="p4-return-handing-back-the-answer"><h3>return: handing back the answer</h3><p class="intro"><code>print</code> only shows a value on the screen. <code>return</code> hands the value back to you so you can use it. This difference matters a lot.</p><p class="like"><b>Think of it like:</b> A calculator that shows you an answer on its screen (<code>print</code>), versus a friend who writes it down and hands you the paper (<code>return</code>).</p><div class="example"><p class="say">Both functions work out the same thing. Only the first one gives you an answer you can use later. A function with no <code>return</code> gives back <code>None</code>.</p><div class="code-box"><div class="bar"><span class="label">Example 4.2</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">def with_tax(amount):
+    return amount * 1.05
+
+def show_tax(amount):
+    print(amount * 1.05)
+
+a = with_tax(100)
+b = show_tax(100)
+
+print("a is", a)
+print("b is", b)
+print(with_tax(100) + with_tax(200))</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">105.0
+a is 105.0
+b is None
+315.0</pre></details></div></section><section class="topic" id="p4-giving-a-function-what-it-needs"><h3>Giving a function what it needs</h3><p class="intro">The values a function needs are called <b>parameters</b>. You can give one a default, which is used when you don't provide a value.</p><p class="like"><b>Think of it like:</b> Ordering coffee. Sugar is "normal" unless you say otherwise.</p><div class="example"><p class="say">An auto fare function. The night charge is 0 unless you say otherwise, and you can name the value when you call it, which makes it easier to read.</p><div class="code-box"><div class="bar"><span class="label">Example 4.3</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">def auto_fare(km, per_km=15, night_charge=0):
+    return 30 + km * per_km + night_charge
+
+print(auto_fare(4))
+print(auto_fare(4, 20))
+print(auto_fare(4, night_charge=50))</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">90
+110
+140</pre></details></div><div class="example"><p class="say">A function can hand back more than one answer. Here, a marks summary gives the total and the highest mark.</p><div class="code-box"><div class="bar"><span class="label">Example 4.4</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">def marks_summary(marks):
+    return sum(marks), max(marks)
+
+total, highest = marks_summary([72, 88, 65])
+print(total, highest)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">225 88</pre></details></div><div class="example"><p class="say">One function can use another, like a big recipe that says "first, make the chutney".</p><div class="code-box"><div class="bar"><span class="label">Example 4.5</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">def is_valid_pin(pin):
+    return pin.isdigit() and len(pin) == 6
+
+def delivery_message(pin):
+    if not is_valid_pin(pin):
+        return "Please check the PIN code"
+    return f"We deliver to {pin}"
+
+print(delivery_message("560011"))
+print(delivery_message("56"))</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">We deliver to 560011
+Please check the PIN code</pre></details></div></section><section class="topic" id="p4-names-inside-a-function-stay-inside"><h3>Names inside a function stay inside</h3><p class="intro">A name created inside a function exists only inside it. Outside, Python has never heard of it.</p><p class="like"><b>Think of it like:</b> What's said in your family's kitchen stays in the kitchen.</p><div class="example"><p class="say">This one fails on purpose: <code>total</code> was made inside the function, and we're asking for it outside.</p><div class="code-box"><div class="bar"><span class="label">Example 4.6</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">def make_bill():
+    total = 500
+    print("Inside:", total)
+
+make_bill()
+print("Outside:", total)</code></pre></div><details class="output"><summary>Show the error</summary><pre class="stdout">Inside: 500</pre><p class="err-label">Error, last line:</p><pre class="stderr">NameError: name 'total' is not defined</pre></details><p class="note-line">To use a value outside a function, <code>return</code> it.</p></div><div class="example"><p class="say">To change an outside name from inside a function, you must say <code>global</code>. It works, but it's better to use <code>return</code>, because <code>global</code> makes bugs hard to find.</p><div class="code-box"><div class="bar"><span class="label">Example 4.7</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">visitors = 0
+
+def new_visitor():
+    global visitors
+    visitors += 1
+
+new_visitor()
+new_visitor()
+print(visitors)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">2</pre></details></div></section><section class="topic" id="p4-labels-on-a-function"><h3>Labels on a function</h3><p class="intro"><b>Type hints</b> are labels that say what a function expects and gives back. A sentence in triple quotes at the top, called a <b>docstring</b>, says what it does. Python doesn't enforce them, but they help people read your code, and a tool you'll meet later, Pydantic, depends on them.</p><p class="like"><b>Think of it like:</b> The label on a medicine bottle: what it's for and how much to take.</p><div class="example"><p class="say"><code>list[float]</code> means "a list of decimal numbers", and <code>-&gt; float</code> means "gives back a decimal number".</p><div class="code-box"><div class="bar"><span class="label">Example 4.8</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">def bill_total(prices: list[float], delivery: float = 0) -&gt; float:
+    """Add up the prices and the delivery charge."""
+    return sum(prices) + delivery
+
+print(bill_total([120.5, 45], delivery=30))</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">195.5</pre></details></div></section><section class="topic" id="p4-functions-in-a-dictionary"><h3>Functions in a dictionary</h3><p class="intro">A function can be stored like any other value, even inside a dictionary. Later, this is how we'll pick which AI model to use.</p><p class="like"><b>Think of it like:</b> A payment screen with UPI, card and cash buttons. You pick one, and that one runs.</p><div class="example"><p class="say">Save each payment function under a name. Notice there are no brackets when storing it. The brackets come only when you run it.</p><div class="code-box"><div class="bar"><span class="label">Example 4.9</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">def pay_by_upi(amount):
+    print(f"Paid Rs {amount} by UPI")
+
+def pay_by_cash(amount):
+    print(f"Collect Rs {amount} in cash")
+
+payment_options = {"upi": pay_by_upi, "cash": pay_by_cash}
+
+choice = "upi"
+payment_options[choice](500)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Paid Rs 500 by UPI</pre></details></div></section><section class="topic" id="p4-things-to-recognise-not-memorise"><h3>Things to recognise, not memorise</h3><p class="intro">You won't write these often, but you'll see them in other people's code. Just know what they mean when you meet them.</p><div class="example"><p class="say"><code>*</code> lets a function take any number of values. <code><b></code> lets it take any number of named values. You'll see these written as <code>*args</code> and <code></b>kwargs</code>.</p><div class="code-box"><div class="bar"><span class="label">Example 4.10</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">def total_of(*prices):
+    return sum(prices)
+
+print(total_of(10, 20, 30))
+
+def show_form(**details):
+    print(details)
+
+show_form(name="Asha", city="Mysuru")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">60
+{'name': 'Asha', 'city': 'Mysuru'}</pre></details></div><div class="example"><p class="say"><code>map()</code> applies a function to every item, and <code>filter()</code> keeps only the items that pass a test. A comprehension does the same job, but you'll see these two in other people's code.</p><div class="code-box"><div class="bar"><span class="label">Example 4.11</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">names = ["asha", "ravi"]
+print(list(map(str.title, names)))
+
+marks = [72, 20, 88]
+print(list(filter(lambda mark: mark &gt;= 35, marks)))</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">['Asha', 'Ravi']
+[72, 88]</pre></details></div><div class="example"><p class="say"><code>lambda</code> is a tiny function with no name, for one quick job. Here, it tells <code>sorted()</code> to sort students by their marks.</p><div class="code-box"><div class="bar"><span class="label">Example 4.12</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">students = [
+    {"name": "Asha", "marks": 72},
+    {"name": "Ravi", "marks": 88},
+    {"name": "Meena", "marks": 65},
+]
+
+topper_first = sorted(students, key=lambda s: s["marks"], reverse=True)
+print(topper_first[0]["name"])</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Ravi</pre></details></div><div class="example"><p class="say">A line with <code>@</code> is called a <b>decorator</b>. It wraps extra steps around a function, like a cook who always washes hands first. You'll meet <code>@</code> later in the course, so read this once. You won't need to write your own.</p><div class="code-box"><div class="bar"><span class="label">Example 4.13</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">def wash_hands_first(cook):
+    def wrapper():
+        print("Washing hands")
+        cook()
+    return wrapper
+
+@wash_hands_first
+def make_dosa():
+    print("Making dosa")
+
+make_dosa()</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Washing hands
+Making dosa</pre></details></div></section><section class="topic" id="p4-imports-using-ready-made-tools"><h3>Imports: using ready-made tools</h3><p class="intro">Python comes with many tools that are already written. <code>import</code> brings one into your file.</p><p class="like"><b>Think of it like:</b> Borrowing a mixer from your neighbour, so you don't have to build one yourself.</p><div class="example"><p class="say"><code>math</code> handles sums like rounding up, and <code>datetime</code> handles dates, such as finding the date 30 days from now.</p><div class="code-box"><div class="bar"><span class="label">Example 4.14</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">import math
+from datetime import date, timedelta
+
+print(math.ceil(4.1))    # Round up: 5 boxes needed for 4.1 boxes of sweets
+
+republic_day = date(2027, 1, 26)
+print(republic_day + timedelta(days=30))
+print(republic_day.strftime("%d %b %Y"))</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">5
+2027-02-25
+26 Jan 2027</pre></details></div><div class="example"><p class="say"><code>as</code> gives a tool a shorter name. You'll see this a lot, such as <code>import numpy as np</code>. <code>from</code> brings in just the part you need.</p><div class="code-box"><div class="bar"><span class="label">Example 4.15</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">import math as m
+from math import floor
+
+print(m.pi)
+print(floor(4.9))    # Round down</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">3.141592653589793
+4</pre></details></div><div class="example"><p class="say"><code>datetime</code> also knows today's date and time, and <code>time.sleep()</code> makes your program wait.</p><div class="code-box"><div class="bar"><span class="label">Example 4.16</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">import time
+from datetime import datetime
+
+print("Please wait...")
+time.sleep(1)                  # Wait 1 second
+
+now = datetime.now()
+print(now.strftime("%d-%m-%Y %H:%M"))</code></pre></div><details class="output"><summary>Show a sample output</summary><pre class="stdout">Please wait...
+04-11-2026 18:59</pre></details><p class="note-line">Your output will show the date and time you run it.</p></div><div class="example"><p class="say"><code>random</code> picks something by chance, like a lucky draw.</p><div class="code-box"><div class="bar"><span class="label">Example 4.17</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">import random
+
+names = ["Asha", "Ravi", "Meena"]
+
+print(random.randint(1, 6))     # Roll a dice
+print(random.choice(names))     # Lucky draw winner</code></pre></div><details class="output"><summary>Show a sample output</summary><pre class="stdout">5
+Asha</pre></details><p class="note-line">Your output will be different, because it's random.</p></div><div class="example"><p class="say"><code>os</code> lets Python ask your computer things. In Session 1, you'll use <code>os.getenv()</code> to read your secret API key, so that the key is never written in your code.</p><div class="code-box"><div class="bar"><span class="label">Example 4.18</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">import os
+
+print(os.getenv("SHOP_NAME", "Not set"))    # Read a saved setting
+print(os.path.exists("practice.py"))        # Does this file exist?</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Not set
+True</pre></details></div><div class="example"><div class="code-box"><div class="bar"><span class="label">terminal · installing a tool someone else wrote</span></div><pre><code class="language-bash"># For reference only. You'll do this together in Session 1.
+python -m venv .venv
+.venv\Scripts\activate         # Windows
+source .venv/bin/activate      # Mac or Linux
+pip install requests</code></pre></div></div></section><section class="topic" id="p4-using-your-own-file"><h3>Using your own file</h3><p class="intro">As a program grows, you can keep related functions in a separate file and <code>import</code> them. The line <code>if __name__ == "__main__":</code> means "run this part only when this file is run directly, not when it's imported".</p><p class="like"><b>Think of it like:</b> Keeping your recipes in one notebook. You bring out the notebook when you cook, but that doesn't start cooking everything in it.</p><div class="example"><p class="say">You need two files for this one. Create <code>bill_tools.py</code> next to <code>practice.py</code>, then run <code>practice.py</code>. Notice that the test line in <code>bill_tools.py</code> doesn't run.</p><div class="code-box"><div class="bar"><span class="label">Step 1 · create bill_tools.py</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">def with_tax(amount):
+    return amount * 1.05
+
+if __name__ == "__main__":
+    print("Testing:", with_tax(200))</code></pre></div><div class="code-box"><div class="bar"><span class="label">Example 4.19 · Step 2 · practice.py</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">import bill_tools
+
+print(bill_tools.with_tax(100))</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">105.0</pre></details><p class="note-line">Now run <code>bill_tools.py</code> directly, and the test line runs. Delete <code>bill_tools.py</code> when you're done.</p></div></section><section class="topic" id="p4-classes-just-enough-to-read-them"><h3>Classes: just enough to read them</h3><p class="intro">A <b>class</b> is a template, and each thing made from it (an <b>object</b>) fills in its own details. We won't go deep, but some tools you'll use later are built with classes, so you should be able to read one.</p><p class="like"><b>Think of it like:</b> A blank admission form is the class. Each student's filled-in form is an object.</p><div class="example"><p class="say">A template for a bank account, then two accounts made from it. <code>self</code> simply means "this particular one".</p><div class="code-box"><div class="bar"><span class="label">Example 4.20</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">class Account:
+    def __init__(self, name, balance):    # Runs when an account is made
+        self.name = name
+        self.balance = balance
+
+    def deposit(self, amount):            # Something an account can do
+        self.balance += amount
+
+asha = Account("Asha", 1000)
+ravi = Account("Ravi", 500)
+
+asha.deposit(200)
+print(asha.name, asha.balance)
+print(ravi.name, ravi.balance)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Asha 1200
+Ravi 500</pre></details></div><div class="example"><p class="say">A class can start from another class and add to it. This is called <b>inheritance</b>. Later in the course, you'll write <code>class Order(BaseModel):</code>, which is this same pattern.</p><div class="code-box"><div class="bar"><span class="label">Example 4.21</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">class Account:
+    def __init__(self, name, balance):
+        self.name = name
+        self.balance = balance
+
+class SavingsAccount(Account):            # Starts from Account
+    def add_interest(self):
+        self.balance += self.balance * 0.04
+
+asha = SavingsAccount("Asha", 1000)
+asha.add_interest()
+print(asha.name, asha.balance)</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Asha 1040.0</pre></details></div><div class="task"><p class="task-tag">Your turn</p><h4>Write a discount function</h4><ol><li>Write a function called <code>final_price(amount, is_member=False)</code>.</li><li>Members get 10% off. Everyone else pays the full price.</li><li>Use <code>return</code>, not <code>print</code>. Call it twice and print both answers.</li></ol><details class="answer"><summary>Show one possible answer</summary><div class="code-box"><div class="bar"><span class="label">Answer</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">def final_price(amount, is_member=False):
+    if is_member:
+        return amount * 0.9
+    return amount
+
+print(final_price(500))
+print(final_price(500, is_member=True))</code></pre></div><p class="err-label ok">Output:</p><pre class="stdout">500
+450.0</pre></details></div><div class="task"><p class="task-tag">Your turn</p><h4>Find the students who passed</h4><ol><li>Write a function called <code>passed(marks)</code>. It takes a list of marks and returns a new list with only the marks of 35 or more.</li><li>Test it with <code>[72, 20, 35, 88, 10]</code>.</li><li>Stretch: write the function's inside as one comprehension.</li></ol><details class="answer"><summary>Show one possible answer</summary><div class="code-box"><div class="bar"><span class="label">Answer</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">def passed(marks):
+    result = []
+    for mark in marks:
+        if mark &gt;= 35:
+            result.append(mark)
+    return result
+
+print(passed([72, 20, 35, 88, 10]))</code></pre></div><p class="err-label ok">Output:</p><pre class="stdout">[72, 35, 88]</pre></details></div></section></section><section class="part teal" id="part-5"><header class="part-head"><p class="kicker">Part 5</p><h2>Errors, Files and JSON</h2><p class="goal">By the end, you won't fear error messages, you can save your data to a file, and you can build one small working program.</p><ol class="toc"><li><a href="#p5-how-to-read-an-error">How to read an error</a></li><li><a href="#p5-try-and-except-planning-for-problems">try and except: planning for problems</a></li><li><a href="#p5-files-saving-your-work">Files: saving your work</a></li><li><a href="#p5-json-how-apps-send-data">JSON: how apps send data</a></li><li><a href="#p5-putting-it-all-together-a-kirana-shop-bill">Putting it all together: a kirana shop bill</a></li></ol></header><section class="topic" id="p5-how-to-read-an-error"><h3>How to read an error</h3><p class="intro">An error isn't a sign you've failed. It's Python telling you what confused it. Read the <b>last line first</b>, because it names the problem. Then look just above it for the line number. Here's what the common ones really say. The exact words can differ slightly between Python versions.</p><p class="like"><b>Think of it like:</b> A note from the car mechanic: it tells you which part to look at.</p><div class="table-wrap"><table class="errors"><thead><tr><th scope="col">Error</th><th scope="col">Code that causes it</th><th scope="col">What it means, and the real message</th></tr></thead><tbody><tr><td><code>NameError</code></td><td><pre class="mini">price = 10
+print(pirce)</pre></td><td>A spelling mistake, or a name that doesn't exist yet<span class="real-err">NameError: name 'pirce' is not defined. Did you mean: 'price'?</span></td></tr><tr><td><code>SyntaxError</code></td><td><pre class="mini">print("Hello"</pre></td><td>Python can't read the line. Often a missing bracket or quote<span class="real-err">SyntaxError: '(' was never closed</span></td></tr><tr><td><code>IndentationError</code></td><td><pre class="mini">if True:
+print("Hi")</pre></td><td>The spaces at the start of a line are missing or uneven<span class="real-err">IndentationError: expected an indented block after 'if' statement on line 1</span></td></tr><tr><td><code>TypeError</code></td><td><pre class="mini">"Rs " + 100</pre></td><td>You mixed values that don't go together<span class="real-err">TypeError: can only concatenate str (not "int") to str</span></td></tr><tr><td><code>ValueError</code></td><td><pre class="mini">int("abc")</pre></td><td>The value can't be used this way: "abc" isn't a number<span class="real-err">ValueError: invalid literal for int() with base 10: 'abc'</span></td></tr><tr><td><code>IndexError</code></td><td><pre class="mini">cart = ["rice"]
+cart[5]</pre></td><td>That position isn't in the list<span class="real-err">IndexError: list index out of range</span></td></tr><tr><td><code>KeyError</code></td><td><pre class="mini">menu = {"idli": 30}
+menu["pizza"]</pre></td><td>That name isn't in the dictionary<span class="real-err">KeyError: 'pizza'</span></td></tr><tr><td><code>ZeroDivisionError</code></td><td><pre class="mini">100 / 0</pre></td><td>You divided by zero<span class="real-err">ZeroDivisionError: division by zero</span></td></tr><tr><td><code>FileNotFoundError</code></td><td><pre class="mini">open("missing.txt")</pre></td><td>The file isn't there, or you're in the wrong folder<span class="real-err">FileNotFoundError: [Errno 2] No such file or directory: 'missing.txt'</span></td></tr><tr><td><code>AttributeError</code></td><td><pre class="mini">cart = ["rice"]
+cart.push("dal")</pre></td><td>That tool doesn't exist for this type of value<span class="real-err">AttributeError: 'list' object has no attribute 'push'</span></td></tr></tbody></table></div><div class="example"><p class="say">When your code runs but the answer is wrong, there's no error message to read. Add <code>print()</code> lines to see what's inside each name, and use <code>type()</code> to check its kind. <code>help()</code> explains any tool.</p><div class="code-box"><div class="bar"><span class="label">Example 5.1</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">price = "50"
+quantity = 2
+
+total = price * quantity
+print("total is", total)        # 5050? That looks wrong
+print(type(price))              # There's the problem: it's text
+
+total = int(price) * quantity
+print("total is", total)
+
+help(len)                       # Python's own explanation of a tool</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">total is 5050
+&lt;class 'str'&gt;
+total is 100
+Help on built-in function len in module builtins:
+
+len(obj, /)
+    Return the number of items in a container.</pre></details></div></section><section class="topic" id="p5-try-and-except-planning-for-problems"><h3>try and except: planning for problems</h3><p class="intro"><code>try</code> means "attempt this". <code>except</code> means "if that goes wrong, do this instead". The program carries on rather than crashing.</p><p class="like"><b>Think of it like:</b> "Try the UPI payment. If it fails, take cash." The sale still happens.</p><div class="example"><p class="say">Someone types a word where we need a number. Instead of a crash, they get a helpful message.</p><div class="code-box"><div class="bar"><span class="label">Example 5.2</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">text = input("How many tickets? ")
+
+try:
+    tickets = int(text)
+    print(f"Booking {tickets} tickets")
+except ValueError:
+    print("Please type a number, like 2")
+
+print("Thank you for using our app")</code></pre></div><p class="typed">Sample run, typing: <code>abc</code></p><details class="output"><summary>Show output</summary><pre class="stdout">How many tickets? abc
+Please type a number, like 2
+Thank you for using our app</pre></details><p class="note-line">Run it again and type <code>2</code>. This time the <code>except</code> part is skipped.</p></div><div class="example"><p class="say">You can plan for different problems. <code>else</code> runs if nothing went wrong, and <code>finally</code> always runs, like "close the shop at the end, no matter what".</p><div class="code-box"><div class="bar"><span class="label">Example 5.3</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">menu = {"idli": 30, "dosa": 60}
+dish = "pizza"
+friends = 0
+
+try:
+    print(menu[dish] / friends)
+except KeyError:
+    print("That dish isn't on the menu")
+except ZeroDivisionError:
+    print("Nobody to split the bill with")
+else:
+    print("All good")
+finally:
+    print("Closing the bill")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">That dish isn't on the menu
+Closing the bill</pre></details></div><div class="example"><p class="say">You can raise your own error when something doesn't make sense, like a cinema refusing to book minus 2 tickets. <code>as problem</code> gives the error message a name, so you can print it.</p><div class="code-box"><div class="bar"><span class="label">Example 5.4</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">def book_tickets(count):
+    if count &lt;= 0:
+        raise ValueError("Tickets must be more than zero")
+    return f"Booked {count} tickets"
+
+try:
+    print(book_tickets(-2))
+except ValueError as problem:
+    print(f"Couldn't book: {problem}")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Couldn't book: Tickets must be more than zero</pre></details></div><div class="example"><p class="say">Handle several errors in one line with brackets. <code>except Exception</code> catches almost anything, and is useful for showing a message, as long as you print what went wrong.</p><div class="code-box"><div class="bar"><span class="label">Example 5.5</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">for text in ["10", "0", "abc"]:
+    try:
+        print(100 / int(text))
+    except (ValueError, ZeroDivisionError) as problem:
+        print(f"Couldn't work it out: {problem}")
+
+try:
+    print(["rice"][5])
+except Exception as problem:
+    print(f"Something went wrong: {problem}")</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">10.0
+Couldn't work it out: division by zero
+Couldn't work it out: invalid literal for int() with base 10: 'abc'
+Something went wrong: list index out of range</pre></details></div><div class="callout warn"><p>Catch only the errors you expect. A bare <code>except:</code> catches everything, including your own spelling mistakes, and then bugs become very hard to find.</p></div></section><section class="topic" id="p5-files-saving-your-work"><h3>Files: saving your work</h3><p class="intro">Variables disappear when the program ends. Files stay. <code>with open()</code> opens a file and closes it for you when you're done. Always add <code>encoding="utf-8"</code>, so Kannada text saves correctly on every laptop.</p><p class="like"><b>Think of it like:</b> A notebook. Variables are what you remember today, and a file is what you write down to keep.</p><div class="example"><p class="say">Keep a daily expense diary. <code>"w"</code> starts a fresh file, <code>"a"</code> adds to the end, and no letter means read.</p><div class="code-box"><div class="bar"><span class="label">Example 5.6</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">with open("diary.txt", "w", encoding="utf-8") as file:
+    file.write("Monday: Rs 200 on vegetables\n")
+    file.write("ನಮಸ್ಕಾರ\n")
+
+with open("diary.txt", "a", encoding="utf-8") as file:
+    file.write("Tuesday: Rs 50 on tea\n")
+
+with open("diary.txt", encoding="utf-8") as file:
+    print(file.read())</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Monday: Rs 200 on vegetables
+ನಮಸ್ಕಾರ
+Tuesday: Rs 50 on tea</pre></details><p class="note-line">This creates <code>diary.txt</code> next to your script, so open it and have a look. Careful: <code>"w"</code> wipes out what's in the file without asking.</p></div><div class="example"><p class="say">Read a file one line at a time. This helps with very long files.</p><div class="code-box"><div class="bar"><span class="label">Example 5.7</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">with open("diary.txt", "w", encoding="utf-8") as file:
+    file.write("Monday: Rs 200\nTuesday: Rs 50\n")
+
+with open("diary.txt", encoding="utf-8") as file:
+    for line in file:
+        print(line.strip())</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Monday: Rs 200
+Tuesday: Rs 50</pre></details></div><div class="example"><p class="say"><code>.readlines()</code> gives you the whole file as a list. <code>os</code> can check whether a file is there before you open it, and can delete a file.</p><div class="code-box"><div class="bar"><span class="label">Example 5.8</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">import os
+
+with open("diary.txt", "w", encoding="utf-8") as file:
+    file.writelines(["Monday\n", "Tuesday\n"])
+
+with open("diary.txt", encoding="utf-8") as file:
+    lines = file.readlines()
+print(lines)
+print(len(lines))
+
+print(os.path.exists("diary.txt"))
+os.remove("diary.txt")               # Careful: there's no undo
+print(os.path.exists("diary.txt"))</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">['Monday\n', 'Tuesday\n']
+2
+True
+False</pre></details></div><div class="example"><p class="say">A CSV file is a simple table that opens in Excel, with commas between the columns. Python's <code>csv</code> tool writes and reads it for you.</p><div class="code-box"><div class="bar"><span class="label">Example 5.9</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">import csv
+
+rows = [
+    ["name", "city", "marks"],
+    ["Asha", "Mysuru", 72],
+    ["Ravi", "Hubballi", 88],
+]
+
+with open("marks.csv", "w", newline="", encoding="utf-8") as file:
+    csv.writer(file).writerows(rows)
+
+with open("marks.csv", newline="", encoding="utf-8") as file:
+    for row in csv.DictReader(file):
+        print(row["name"], "scored", row["marks"])</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Asha scored 72
+Ravi scored 88</pre></details><p class="note-line">Open <code>marks.csv</code> in Excel to see your table.</p></div></section><section class="topic" id="p5-json-how-apps-send-data"><h3>JSON: how apps send data</h3><p class="intro">JSON is the text format apps use to send data to each other. It looks almost the same as Python dictionaries and lists, and Python's <code>json</code> tool converts between the two. You'll use it throughout this course.</p><p class="like"><b>Think of it like:</b> A common language. Two people with different mother tongues can both talk in English. Different apps all understand JSON.</p><div class="example"><p class="say">Turn a dictionary into JSON text, then back again. Look closely at the output: <code>True</code> becomes <code>true</code>, and <code>None</code> becomes <code>null</code>.</p><div class="code-box"><div class="bar"><span class="label">Example 5.10</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">import json
+
+order = {"id": 1001, "paid": True, "coupon": None, "items": ["rice", "dal"]}
+
+text = json.dumps(order)     # Python to JSON text
+print(text)
+print(type(text))
+
+back = json.loads(text)      # JSON text back to Python
+print(back["items"][0])
+print(type(back))</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">{"id": 1001, "paid": true, "coupon": null, "items": ["rice", "dal"]}
+&lt;class 'str'&gt;
+rice
+&lt;class 'dict'&gt;</pre></details></div><div class="example"><p class="say">Save a contact list to a file and read it back, so it's still there the next time you run your program.</p><div class="code-box"><div class="bar"><span class="label">Example 5.11</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">import json
+
+contacts = [
+    {"name": "Asha", "city": "Mysuru"},
+    {"name": "Ravi", "city": "Hubballi"},
+]
+
+with open("contacts.json", "w", encoding="utf-8") as file:
+    json.dump(contacts, file, indent=2)
+
+with open("contacts.json", encoding="utf-8") as file:
+    saved = json.load(file)
+
+for person in saved:
+    print(person["name"], "lives in", person["city"])</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">Asha lives in Mysuru
+Ravi lives in Hubballi</pre></details><p class="note-line">To remember them: <code>dumps</code> and <code>loads</code>, with an s, work with text (s for string). <code>dump</code> and <code>load</code> work with files.</p></div><div class="example"><p class="say">JSON writes Kannada as codes by default. Add <code>ensure_ascii=False</code> to keep it readable, and <code>indent</code> to make it neat.</p><div class="code-box"><div class="bar"><span class="label">Example 5.12</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">import json
+
+greeting = {"en": "Hello", "kn": "ನಮಸ್ಕಾರ"}
+
+print(json.dumps(greeting))
+print(json.dumps(greeting, ensure_ascii=False, indent=2))</code></pre></div><details class="output"><summary>Show output</summary><pre class="stdout">{"en": "Hello", "kn": "\u0ca8\u0cae\u0cb8\u0ccd\u0c95\u0cbe\u0cb0"}
+{
+  "en": "Hello",
+  "kn": "ನಮಸ್ಕಾರ"
+}</pre></details></div></section><section class="topic" id="p5-putting-it-all-together-a-kirana-shop-bill"><h3>Putting it all together: a kirana shop bill</h3><p class="intro">This small program uses nearly everything from this session. It asks for a PIN code, takes an order, prints a bill and saves it. Read it one function at a time, and try to say what each one does in your own words.</p><div class="example"><p class="say">A fictional shop's checkout. In the sample run, the person first types a wrong PIN code, then asks for something the shop doesn't sell, then types a word instead of a number.</p><div class="code-box"><div class="bar"><span class="label">Example 5.13</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">import json
+
+MENU = {"rice": 62, "dal": 145, "milk": 28, "coffee": 95}
+
+
+def ask_pin():
+    pin = input("PIN code: ").strip()
+    while not (pin.isdigit() and len(pin) == 6):
+        print("A PIN code has exactly 6 digits.")
+        pin = input("PIN code: ").strip()
+    return pin
+
+
+def ask_quantity(item):
+    try:
+        return int(input(f"How many {item}? "))
+    except ValueError:
+        print("That isn't a number, so we'll use 1.")
+        return 1
+
+
+def take_order():
+    cart = []
+    while True:
+        item = input("Item (or done): ").strip().lower()
+        if item == "done":
+            break
+        if item not in MENU:
+            print(f"Sorry, we only have: {', '.join(MENU)}")
+            continue
+        quantity = ask_quantity(item)
+        cart.append({"item": item, "quantity": quantity, "cost": quantity * MENU[item]})
+    return cart
+
+
+def delivery_charge(subtotal):
+    return 0 if subtotal &gt;= 500 else 40
+
+
+pin = ask_pin()
+cart = take_order()
+
+subtotal = sum(line["cost"] for line in cart)
+charge = delivery_charge(subtotal)
+
+print("\n--- Your bill ---")
+for line in cart:
+    print(f"{line['quantity']} x {line['item']}: Rs {line['cost']}")
+print(f"Delivery: Rs {charge}")
+print(f"Total: Rs {subtotal + charge}")
+
+order = {"pin": pin, "cart": cart, "total": subtotal + charge}
+with open("last_order.json", "w", encoding="utf-8") as file:
+    json.dump(order, file, indent=2)
+print("Saved to last_order.json")</code></pre></div><p class="typed">Sample run, typing: <code>56</code>, <code>560011</code>, <code>rice</code>, <code>5</code>, <code>ghee</code>, <code>coffee</code>, <code>two</code>, <code>done</code></p><details class="output"><summary>Show output</summary><pre class="stdout">PIN code: 56
+A PIN code has exactly 6 digits.
+PIN code: 560011
+Item (or done): rice
+How many rice? 5
+Item (or done): ghee
+Sorry, we only have: rice, dal, milk, coffee
+Item (or done): coffee
+How many coffee? two
+That isn't a number, so we'll use 1.
+Item (or done): done
+
+--- Your bill ---
+5 x rice: Rs 310
+1 x coffee: Rs 95
+Delivery: Rs 40
+Total: Rs 445
+Saved to last_order.json</pre></details></div><div class="task"><p class="task-tag">Your turn</p><h4>Make the shop better</h4><ol><li>Add <code>"ghee": 320</code> to the menu and run it again.</li><li>Give members 10% off. Ask if they're a member, and apply the discount in a new function.</li><li>If the cart is empty, print a message and don't save a file.</li><li>Stretch: when the program starts, read <code>last_order.json</code> and print the last total. Use <code>try</code> and <code>except FileNotFoundError</code> for the very first run.</li></ol><details class="answer"><summary>Show one possible answer</summary><div class="code-box"><div class="bar"><span class="label">Answer</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python"># This answer covers the stretch step only
+import json
+
+try:
+    with open("last_order.json", encoding="utf-8") as file:
+        last = json.load(file)
+    print(f"Your last order was Rs {last['total']}")
+except FileNotFoundError:
+    print("This is your first order")</code></pre></div><p class="err-label ok">Output:</p><pre class="stdout">This is your first order</pre></details></div><div class="task"><p class="task-tag">Your turn</p><h4>Get ready for Session 1</h4><ol><li>Save this text in a variable: <code>'{"post code": "560011", "places": [{"place name": "Jayanagar"}]}'</code></li><li>Convert it to Python with <code>json.loads()</code>.</li><li>Print the first place name.</li><li>Use <code>.get()</code> to ask for a <code>state</code> key, and print <code>Unknown</code> because it's missing.</li></ol><details class="answer"><summary>Show one possible answer</summary><div class="code-box"><div class="bar"><span class="label">Answer</span><button class="copy" type="button">Copy</button></div><pre><code class="language-python">import json
+
+text = '{"post code": "560011", "places": [{"place name": "Jayanagar"}]}'
+
+data = json.loads(text)
+print(data["places"][0]["place name"])
+print(data.get("state", "Unknown"))</code></pre></div><p class="err-label ok">Output:</p><pre class="stdout">Jayanagar
+Unknown</pre></details></div></section></section>
+<footer class="end"><h2>You're ready for Session 1</h2><p>Next, you'll use these same lists, dictionaries and loops to ask real online services for data, and to get your first reply from an AI model.</p></footer>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script>
+(function(){
+  function legacyCopy(text){
+    var area=document.createElement('textarea');
+    area.value=text;area.setAttribute('readonly','');area.style.position='fixed';area.style.opacity='0';
+    document.body.appendChild(area);area.select();document.execCommand('copy');area.remove();
+  }
+  document.querySelectorAll('.copy').forEach(function(button){
+    button.addEventListener('click',function(){
+      var text=button.closest('.code-box').querySelector('pre').textContent;
+      function done(){
+        button.textContent='Copied';button.classList.add('done');
+        setTimeout(function(){button.textContent='Copy';button.classList.remove('done');},1400);
+      }
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done,function(){legacyCopy(text);done();});
+      }else{legacyCopy(text);done();}
+    });
+  });
+  document.querySelectorAll('.code-box pre,.table-wrap').forEach(function(el){
+    if(el.scrollWidth>el.clientWidth+1){el.tabIndex=0;}
+  });
+  var links=[].slice.call(document.querySelectorAll('.top nav a'));
+  var parts=links.map(function(a){return document.querySelector(a.getAttribute('href'));});
+  function mark(){
+    var line=window.scrollY+window.innerHeight*0.3,current=-1;
+    parts.forEach(function(part,i){if(part.offsetTop<=line){current=i;}});
+    links.forEach(function(a,i){
+      if(i===current){
+        a.setAttribute('aria-current','true');
+        a.style.setProperty('--accent','var(--'+a.dataset.colour+')');
+      }else{a.removeAttribute('aria-current');}
+    });
+  }
+  window.addEventListener('scroll',mark,{passive:true});
+  window.addEventListener('resize',mark);
+  mark();
+})();
+</script>
+</body>
+</html>
